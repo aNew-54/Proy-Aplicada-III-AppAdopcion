@@ -1,0 +1,57 @@
+# ==========================================
+# Archivos de configuración local (¡CRÍTICO!)
+# ==========================================
+# Aquí viven tus rutas locales (SDK) y tus variables seguras como SUPABASE_KEY
+local.properties
+/local.properties
+
+# ==========================================
+# Android Studio / IntelliJ IDEA
+# ==========================================
+.idea/
+*.iml
+*.iws
+*.ipr
+/build/
+
+# ==========================================
+# Archivos de Compilación (Gradle)
+# ==========================================
+.gradle/
+*/build/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# ==========================================
+# Archivos Ejecutables y Binarios (Artefactos)
+# ==========================================
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+
+# ==========================================
+# Archivos de Seguridad (Keystores)
+# ==========================================
+# NUNCA subas tus llaves de firma de la Play Store
+*.jks
+*.keystore
+
+# ==========================================
+# Archivos del Sistema Operativo
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# Logs y Cachés
+# ==========================================
+*.log
+captures/
+.cxx/

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_descubrir"
+        android:icon="@drawable/ic_explore"
+        android:title="Descubrir" />
+
+    <item
+        android:id="@+id/nav_refugios"
+        android:icon="@drawable/ic_location_on"
+        android:title="Refugios" />
+
+    <item
+        android:id="@+id/nav_perfil"
+        android:icon="@drawable/ic_person"
+        android:title="Yo" />
+
+</menu>

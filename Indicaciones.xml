@@ -1,0 +1,104 @@
+<!-- ══════════════════════════════════════════════════════════════
+     ESTRUCTURA DE PAQUETES RECOMENDADA PARA EL EQUIPO
+     ══════════════════════════════════════════════════════════════
+
+app/src/main/java/unc.edu.pe.appadopcion/
+│
+├── data/
+│   ├── api/
+│   │   ├── SupabaseApi.java        ← Todos los endpoints REST
+│   │   ├── SupabaseClient.java     ← Retrofit + headers JWT
+│   │   └── StorageClient.java      ← Retrofit para Storage
+│   ├── local/
+│   │   └── SessionManager.java     ← SharedPreferences (uuid, token, rol)
+│   ├── model/                      ← Todos los POJOs (Request/Response)
+│   │   ├── AuthRequest.java
+│   │   ├── AuthResponse.java
+│   │   ├── UsuarioRequest.java
+│   │   ├── AdoptanteRequest.java
+│   │   ├── AdoptanteResponse.java
+│   │   ├── RefugioRequest.java
+│   │   ├── RefugioResponse.java
+│   │   ├── MascotaRequest.java
+│   │   ├── MascotaResponse.java
+│   │   ├── FavoritoRequest.java
+│   │   ├── FavoritoResponse.java
+│   │   ├── SolicitudRequest.java
+│   │   ├── SolicitudResponse.java
+│   │   ├── EspecieResponse.java
+│   │   ├── RazaResponse.java
+│   │   ├── FotoMascotaResponse.java
+│   │   ├── VacunaResponse.java
+│   │   ├── VacunaMascotaResponse.java
+│   │   └── IntervencionResponse.java
+│   └── repository/
+│       └── AppRepository.java      ← PUNTO DE ENTRADA ÚNICO para el equipo
+│
+├── ui/
+│   ├── auth/
+│   │   ├── WelcomeActivity.java
+│   │   ├── LoginActivity.java
+│   │   ├── RegistroAdoptanteActivity.java
+│   │   ├── RegistroRefugioActivity.java
+│   │   └── MapPickerActivity.java
+│   ├── main/
+│   │   └── MainActivity.java       ← BottomNav host
+│   ├── perfil/
+│   │   ├── PerfilFragment.java     ← Router (adoptante o refugio)
+│   │   ├── AdoptantePerfilFragment.java
+│   │   ├── RefugioPerfilFragment.java
+│   │   ├── SolicitudesAdoptanteAdapter.java
+│   │   └── SolicitudesRefugioAdapter.java
+│   ├── descubrir/
+│   │   └── DescubrirFragment.java  ← PRÓXIMA IMPLEMENTACIÓN
+│   └── mapa/
+│       └── RefugiosFragment.java   ← PRÓXIMA IMPLEMENTACIÓN
+│
+└── utils/
+    └── ImageHelper.java            ← Compresión de imágenes
+
+══════════════════════════════════════════════════════════════════
+GUÍA PARA EL EQUIPO — CÓMO USAR AppRepository
+══════════════════════════════════════════════════════════════════
+
+1. Al inicio de cualquier Fragment/Activity autenticada:
+   SessionManager session = new SessionManager(requireContext());
+   AppRepository repo = new AppRepository(session.getToken());
+
+2. Llamadas disponibles (ejemplos):
+
+   // Obtener mascotas disponibles ordenadas por fecha
+   repo.obtenerMascotasDisponibles("fecharegistro.desc", 20, 0, callback);
+
+   // Filtrar por especie (ej: 1 = Perros)
+   repo.filtrarPorEspecie(1, "fecharegistro.desc", 20, 0, callback);
+
+   // Buscar por nombre
+   repo.buscarMascotasPorNombre("firulais", "fecharegistro.desc", callback);
+
+   // Ver detalle de una mascota
+   repo.obtenerMascota(42, callback);
+
+   // Agregar/quitar favorito
+   repo.agregarFavorito(idMascota, idAdoptante, callback);
+   repo.eliminarFavorito(idMascota, idAdoptante, callback);
+
+   // Enviar solicitud de adopción
+   repo.crearSolicitud(idRefugio, idMascota, idAdoptante, "Me gustaría adoptarla", callback);
+
+   // Obtener razas con mascotas publicadas (para los chips de filtro)
+   repo.obtenerRazasConMascotas(callback);
+
+3. El callback siempre es retrofit2.Callback<T>:
+   new Callback<List<MascotaResponse>>() {
+       @Override public void onResponse(Call<List<MascotaResponse>> call,
+                                        Response<List<MascotaResponse>> resp) {
+           if (resp.isSuccessful() && resp.body() != null) {
+               // usar resp.body()
+           }
+       }
+       @Override public void onFailure(Call<List<MascotaResponse>> call, Throwable t) {
+           // manejar error de red
+       }
+   }
+-->
