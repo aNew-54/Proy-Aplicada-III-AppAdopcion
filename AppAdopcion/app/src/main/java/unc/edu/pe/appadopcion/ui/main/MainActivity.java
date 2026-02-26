@@ -11,7 +11,7 @@ import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.databinding.ActivityMainBinding;
 import unc.edu.pe.appadopcion.ui.auth.WelcomeActivity;
 import unc.edu.pe.appadopcion.ui.descubrir.DescubrirFragment;
-import unc.edu.pe.appadopcion.ui.mapa.RefugiosFragment;
+import unc.edu.pe.appadopcion.ui.refugios.RefugiosFragment;
 import unc.edu.pe.appadopcion.ui.perfil.PerfilFragment;
 
 public class MainActivity extends AppCompatActivity {
