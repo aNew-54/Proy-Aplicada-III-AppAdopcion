@@ -9,27 +9,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import unc.edu.pe.appadopcion.R;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.data.model.RefugioResponse;
 import unc.edu.pe.appadopcion.data.model.SolicitudResponse;
-import unc.edu.pe.appadopcion.data.repository.AppRepository;
 import unc.edu.pe.appadopcion.databinding.FragmentRefugioPerfilBinding;
 import unc.edu.pe.appadopcion.ui.main.MainActivity;
 import unc.edu.pe.appadopcion.utils.ImageLoader;
+import unc.edu.pe.appadopcion.vm.perfil.RefugioPerfilViewModel;
 
 public class RefugioPerfilFragment extends Fragment {
 
     private FragmentRefugioPerfilBinding binding;
     private SessionManager session;
-    private AppRepository repo;
+    private RefugioPerfilViewModel viewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -42,10 +40,16 @@ public class RefugioPerfilFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        session = new SessionManager(requireContext());
-        repo    = new AppRepository(session.getToken());
 
-        cargarPerfil();
+        session = new SessionManager(requireContext());
+        viewModel = new ViewModelProvider(this).get(RefugioPerfilViewModel.class);
+
+        configurarObservadores();
+
+        // Evita recargar los datos si el ViewModel ya los tiene (ej: al girar la pantalla)
+        if (viewModel.getPerfil().getValue() == null) {
+            viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
+        }
 
         binding.btnEditarPerfil.setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Editar perfil — próximamente", Toast.LENGTH_SHORT).show());
@@ -56,33 +60,30 @@ public class RefugioPerfilFragment extends Fragment {
         binding.btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
     }
 
-    private void cargarPerfil() {
-        if (binding == null) return;
-        binding.progressBar.setVisibility(View.VISIBLE);
+    private void configurarObservadores() {
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (binding != null) {
+                binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+            }
+        });
 
-        repo.obtenerRefugioPorUuid(session.getUuid(),
-                new Callback<List<RefugioResponse>>() {
-                    @Override
-                    public void onResponse(Call<List<RefugioResponse>> call,
-                                           Response<List<RefugioResponse>> resp) {
-                        // ── CRÍTICO: null check antes de tocar binding
-                        if (binding == null || !isAdded()) return;
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
 
-                        binding.progressBar.setVisibility(View.GONE);
-                        if (resp.isSuccessful() && resp.body() != null && !resp.body().isEmpty()) {
-                            RefugioResponse r = resp.body().get(0);
-                            mostrarDatos(r);
-                            cargarSolicitudesRecibidas(r.idRefugio);
-                        }
-                    }
+        viewModel.getPerfil().observe(getViewLifecycleOwner(), refugio -> {
+            if (refugio != null) {
+                mostrarDatos(refugio);
+            }
+        });
 
-                    @Override
-                    public void onFailure(Call<List<RefugioResponse>> call, Throwable t) {
-                        if (binding == null || !isAdded()) return;
-                        binding.progressBar.setVisibility(View.GONE);
-                        Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        viewModel.getSolicitudes().observe(getViewLifecycleOwner(), solicitudes -> {
+            if (solicitudes != null) {
+                cargarSolicitudesEnUI(solicitudes);
+            }
+        });
     }
 
     private void mostrarDatos(RefugioResponse r) {
@@ -95,7 +96,7 @@ public class RefugioPerfilFragment extends Fragment {
         binding.tvDescripcion.setText(r.descripcion != null ? r.descripcion : "Sin descripción");
         binding.tvMascotasDisponibles.setText(r.mascotasDisponibles + " mascotas disponibles");
 
-        // Foto de perfil — bucket privado: signed URL
+        // Foto de perfil
         ImageLoader.cargarAvatarCircular(
                 requireContext(),
                 session.getToken(),
@@ -104,7 +105,7 @@ public class RefugioPerfilFragment extends Fragment {
                 R.drawable.ic_pets
         );
 
-        // Portada — bucket público: URL directa
+        // Portada
         if (r.urlPortada != null && !r.urlPortada.isEmpty()) {
             ImageLoader.cargarPublica(
                     requireContext(),
@@ -115,37 +116,19 @@ public class RefugioPerfilFragment extends Fragment {
         }
     }
 
-    private void cargarSolicitudesRecibidas(int idRefugio) {
+    private void cargarSolicitudesEnUI(List<SolicitudResponse> lista) {
         if (binding == null) return;
 
-        repo.obtenerSolicitudesRefugio(idRefugio,
-                new Callback<List<SolicitudResponse>>() {
-                    @Override
-                    public void onResponse(Call<List<SolicitudResponse>> call,
-                                           Response<List<SolicitudResponse>> resp) {
-                        if (binding == null || !isAdded()) return;
-                        if (resp.isSuccessful() && resp.body() != null) {
-                            List<SolicitudResponse> lista = resp.body();
-                            if (lista.isEmpty()) {
-                                binding.tvSinSolicitudes.setVisibility(View.VISIBLE);
-                                binding.rvSolicitudes.setVisibility(View.GONE);
-                            } else {
-                                binding.tvSinSolicitudes.setVisibility(View.GONE);
-                                binding.rvSolicitudes.setVisibility(View.VISIBLE);
-                                binding.rvSolicitudes.setLayoutManager(
-                                        new LinearLayoutManager(requireContext()));
-                                binding.rvSolicitudes.setAdapter(
-                                        new SolicitudesRefugioAdapter(lista, (id, aprobada) ->
-                                                Toast.makeText(requireContext(),
-                                                        "Gestión — próximamente",
-                                                        Toast.LENGTH_SHORT).show()));
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<SolicitudResponse>> call, Throwable t) { /* noop */ }
-                });
+        if (lista.isEmpty()) {
+            binding.tvSinSolicitudes.setVisibility(View.VISIBLE);
+            binding.rvSolicitudes.setVisibility(View.GONE);
+        } else {
+            binding.tvSinSolicitudes.setVisibility(View.GONE);
+            binding.rvSolicitudes.setVisibility(View.VISIBLE);
+            binding.rvSolicitudes.setLayoutManager(new LinearLayoutManager(requireContext()));
+            binding.rvSolicitudes.setAdapter(new SolicitudesRefugioAdapter(lista, (id, aprobada) ->
+                    Toast.makeText(requireContext(), "Gestión — próximamente", Toast.LENGTH_SHORT).show()));
+        }
     }
 
     private void cerrarSesion() {
@@ -157,6 +140,6 @@ public class RefugioPerfilFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // ← LA CLAVE
+        binding = null;
     }
 }
