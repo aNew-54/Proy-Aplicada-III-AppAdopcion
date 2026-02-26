@@ -1,4 +1,4 @@
-package unc.edu.pe.appadopcion.ui.mapa;
+package unc.edu.pe.appadopcion.ui.refugios;
 
 import android.os.Bundle;
 
