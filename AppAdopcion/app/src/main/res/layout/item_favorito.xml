@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivFotoMascota"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:background="#EEEEEE"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/tvNombreMascota"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivFotoMascota"
+            app:layout_constraintTop_toTopOf="@+id/ivFotoMascota"
+            tools:text="Osa" />
+
+        <TextView
+            android:id="@+id/tvLabelRaza"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Raza:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvNombreMascota"
+            app:layout_constraintTop_toBottomOf="@+id/tvNombreMascota" />
+
+        <TextView
+            android:id="@+id/tvRazaMascota"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLabelRaza"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvLabelRaza"
+            app:layout_constraintTop_toTopOf="@+id/tvLabelRaza"
+            tools:text="Cooker" />
+
+        <TextView
+            android:id="@+id/tvLabelEdad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Edad:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvNombreMascota"
+            app:layout_constraintTop_toBottomOf="@+id/tvLabelRaza" />
+
+        <TextView
+            android:id="@+id/tvEdadMascota"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLabelEdad"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvLabelEdad"
+            app:layout_constraintTop_toTopOf="@+id/tvLabelEdad"
+            tools:text="2 años y 3 meses" />
+
+        <TextView
+            android:id="@+id/tvLabelRefugio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Refugio:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvNombreMascota"
+            app:layout_constraintTop_toBottomOf="@+id/tvLabelEdad" />
+
+        <TextView
+            android:id="@+id/tvRefugioMascota"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLabelRefugio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvLabelRefugio"
+            app:layout_constraintTop_toTopOf="@+id/tvLabelRefugio"
+            tools:text="Refugio Patitas Amorosas" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
