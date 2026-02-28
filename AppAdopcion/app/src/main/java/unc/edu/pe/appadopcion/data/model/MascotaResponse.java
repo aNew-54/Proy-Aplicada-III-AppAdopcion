@@ -1,7 +1,7 @@
 package unc.edu.pe.appadopcion.data.model;
 import com.google.gson.annotations.SerializedName;
-
-public class MascotaResponse {
+import java.io.Serializable;
+public class MascotaResponse implements Serializable{
     @SerializedName("id_mascota")
     public int idMascota;
     @SerializedName("nombremascota")
