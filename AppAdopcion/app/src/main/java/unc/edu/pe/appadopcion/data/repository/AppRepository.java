@@ -2,6 +2,8 @@ package unc.edu.pe.appadopcion.data.repository;
 
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Callback;
 import unc.edu.pe.appadopcion.data.api.SupabaseApi;
 import unc.edu.pe.appadopcion.data.api.SupabaseClient;
@@ -293,5 +295,35 @@ public class AppRepository {
 
     public void obtenerIntervencionesMascota(int idMascota, Callback<List<IntervencionResponse>> cb) {
         api.obtenerIntervencionesDeMascota("eq." + idMascota).enqueue(cb);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // AGREGAR MASCOTA
+    // ══════════════════════════════════════════════════════════════
+
+    /** Inserta mascota y devuelve el objeto creado con su id generado */
+    public void crearMascotaConRetorno(MascotaRequest req, Callback<List<MascotaResponse>> cb) {
+        api.crearMascotaConRetorno("return=representation", req).enqueue(cb);
+    }
+
+    /** Sube una imagen al bucket de Storage y llama al callback */
+    public void subirImagen(String bucket, String path, byte[] bytes, Callback<Void> cb) {
+        RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), bytes);
+        api.subirImagen("image/jpeg", bucket, path, body).enqueue(cb);
+    }
+
+    /** Registra una foto en la tabla fotomascota */
+    public void agregarFotoMascota(FotoMascotaRequest req, Callback<Void> cb) {
+        api.agregarFotoMascota(req).enqueue(cb);
+    }
+
+    /** Registra una vacuna aplicada a la mascota */
+    public void agregarVacunaMascota(VacunaMascotaRequest req, Callback<Void> cb) {
+        api.agregarVacunaMascota(req).enqueue(cb);
+    }
+
+    /** Registra una intervención médica */
+    public void agregarIntervencion(IntervencionRequest req, Callback<Void> cb) {
+        api.agregarIntervencion(req).enqueue(cb);
     }
 }

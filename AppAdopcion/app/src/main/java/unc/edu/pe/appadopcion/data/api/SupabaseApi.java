@@ -2,12 +2,17 @@ package unc.edu.pe.appadopcion.data.api;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 import unc.edu.pe.appadopcion.data.model.*;
@@ -288,4 +293,43 @@ public interface SupabaseApi {
 
     @GET("rest/v1/intervencionmedica")
     Call<List<IntervencionResponse>> obtenerIntervencionesDeMascota(@Query("id_mascota") String eqId);
+
+    // ══════════════════════════════════════════════════════════════
+    // POST MASCOTA
+    // ══════════════════════════════════════════════════════════════
+
+    @POST("rest/v1/mascota")
+    Call<List<MascotaResponse>> crearMascotaConRetorno(
+            @Header("Prefer") String prefer,
+            @Body MascotaRequest mascota
+    );
+
+
+    // ── FOTOS DE MASCOTA ──────────────────────────────────────────
+    @POST("rest/v1/fotomascota")
+    Call<Void> agregarFotoMascota(@Body FotoMascotaRequest foto);
+
+
+    // ── VACUNAS DE MASCOTA ────────────────────────────────────────
+    @POST("rest/v1/detallemascotavacunas")
+    Call<Void> agregarVacunaMascota(@Body VacunaMascotaRequest vacuna);
+
+
+    // ── INTERVENCIONES ────────────────────────────────────────────
+    @POST("rest/v1/intervencionmedica")
+    Call<Void> agregarIntervencion(@Body IntervencionRequest intervencion);
+
+
+    // ── STORAGE — subir imagen ────────────────────────────────────
+    // nombre_bucket: el nombre exacto de tu bucket en Supabase Storage
+    // path: ruta dentro del bucket, ej: "mascotas/portada_uuid.jpg"
+    @PUT("storage/v1/object/{bucket}/{path}")
+    Call<Void> subirImagen(
+            @Header("Content-Type") String contentType,  // "image/jpeg"
+            @Path("bucket") String bucket,
+            @Path(value = "path", encoded = true) String path,
+            @Body RequestBody imagen
+    );
+
+
 }

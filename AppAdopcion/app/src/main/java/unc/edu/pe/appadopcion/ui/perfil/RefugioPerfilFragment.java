@@ -63,7 +63,7 @@ public class RefugioPerfilFragment extends Fragment {
 
         // Carga inicial (Evita recargar al girar la pantalla)
         if (viewModel.getPerfil().getValue() == null) {
-            viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
+            viewModel.cargarDatosCompletos(session.getUuid(), session.getToken(), requireContext());
         }
 
         // --- NUEVO: BOTÓN CONECTADO AL LAUNCHER ---

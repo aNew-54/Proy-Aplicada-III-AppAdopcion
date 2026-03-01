@@ -69,4 +69,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // Glide (para cargar imágenes desde URL)
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    implementation("com.google.android.material:material:1.x.x")
 }

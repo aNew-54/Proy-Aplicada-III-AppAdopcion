@@ -3,7 +3,9 @@ package unc.edu.pe.appadopcion.vm.auth;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -15,42 +17,27 @@ import unc.edu.pe.appadopcion.data.repository.AppRepository;
 
 public class LoginViewModel extends ViewModel {
 
-    // --- NUEVA CLASE PARA ENCAPSULAR EL RESULTADO ---
-    public static class LoginResult {
-        public String uuid;
-        public String token;
-        public String rol;
-        public int idAsociado; // Aquí guardaremos el id_adoptante o el id_refugio
+    private final MutableLiveData<Boolean> isLoading    = new MutableLiveData<>(false);
+    private final MutableLiveData<String> errorMessage  = new MutableLiveData<>();
+    private final MutableLiveData<AuthResponse> loginSuccess = new MutableLiveData<>();
+    private final MutableLiveData<Integer> idRefugioLiveData = new MutableLiveData<>(-1);
 
-        public LoginResult(String uuid, String token, String rol, int idAsociado) {
-            this.uuid = uuid;
-            this.token = token;
-            this.rol = rol;
-            this.idAsociado = idAsociado;
-        }
-    }
-
-    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
-    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
-    // Ahora emitimos nuestro LoginResult personalizado
-    private final MutableLiveData<LoginResult> loginSuccess = new MutableLiveData<>();
-
-    public LiveData<Boolean> getIsLoading() { return isLoading; }
-    public LiveData<String> getErrorMessage() { return errorMessage; }
-    public LiveData<LoginResult> getLoginSuccess() { return loginSuccess; }
+    public LiveData<Boolean> getIsLoading()          { return isLoading; }
+    public LiveData<String> getErrorMessage()        { return errorMessage; }
+    public LiveData<AuthResponse> getLoginSuccess()  { return loginSuccess; }
+    public LiveData<Integer> getIdRefugio()          { return idRefugioLiveData; }
 
     public void iniciarSesion(String email, String password) {
         isLoading.setValue(true);
         AppRepository repoAnon = new AppRepository();
-
-        // PASO 1: Login en Supabase
         repoAnon.login(email, password, new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> resp) {
                 if (resp.isSuccessful() && resp.body() != null) {
-                    String uuid = resp.body().getUser().getId();
-                    String token = resp.body().getAccessToken();
-                    obtenerRolUsuario(uuid, token);
+                    AuthResponse authResponse = resp.body();
+                    String uuid  = authResponse.getUser().getId();
+                    String token = authResponse.getAccessToken();
+                    obtenerRolUsuario(uuid, token, authResponse);
                 } else {
                     isLoading.setValue(false);
                     errorMessage.setValue("Correo o contraseña incorrectos");
@@ -67,7 +54,6 @@ public class LoginViewModel extends ViewModel {
     // PASO 2: Obtener el Rol
     private void obtenerRolUsuario(String uuid, String token) {
         AppRepository repoAuth = new AppRepository(token);
-
         repoAuth.obtenerUsuario(uuid, new Callback<List<UsuarioRequest>>() {
             @Override
             public void onResponse(Call<List<UsuarioRequest>> call, Response<List<UsuarioRequest>> r) {
@@ -87,6 +73,35 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
+    private void obtenerIdRefugio(String uuid, String token, AuthResponse authResponse) {
+        AppRepository repoAuth = new AppRepository(token);
+        repoAuth.obtenerRefugioPorUuid(uuid, new Callback<List<RefugioResponse>>() {
+            @Override
+            public void onResponse(Call<List<RefugioResponse>> call, Response<List<RefugioResponse>> r) {
+                isLoading.setValue(false);
+                if (r.isSuccessful() && r.body() != null && !r.body().isEmpty()) {
+                    int idRefugio = r.body().get(0).idRefugio;
+                    idRefugioLiveData.setValue(idRefugio);
+                } else {
+                    // AGREGA ESTO TEMPORALMENTE
+                    String error = "";
+                    try {
+                        error = r.errorBody() != null ? r.errorBody().string() : "body null o vacío, code: " + r.code();
+                    } catch (Exception e) { error = e.getMessage(); }
+                    errorMessage.setValue("DEBUG refugio: " + error);
+                    idRefugioLiveData.setValue(-1);
+                }
+                loginSuccess.setValue(authResponse);
+            }
+            @Override
+            public void onFailure(Call<List<RefugioResponse>> call, Throwable t) {
+                isLoading.setValue(false);
+                errorMessage.setValue("DEBUG fallo refugio: " + t.getMessage());
+                idRefugioLiveData.setValue(-1);
+                loginSuccess.setValue(authResponse);
+            }
+        });
+      
     // PASO 3: Obtener el ID numérico correspondiente (Adoptante o Refugio)
     private void obtenerPerfilEspecifico(String uuid, String token, String rol) {
         AppRepository repoAuth = new AppRepository(token);

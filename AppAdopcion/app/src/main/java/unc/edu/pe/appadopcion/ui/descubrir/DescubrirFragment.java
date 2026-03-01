@@ -1,5 +1,6 @@
 package unc.edu.pe.appadopcion.ui.descubrir;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,37 +9,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import unc.edu.pe.appadopcion.R;
+import unc.edu.pe.appadopcion.databinding.FragmentDescubrirBinding;
+import unc.edu.pe.appadopcion.ui.mascotas.AgregarMascotaActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DescubrirFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DescubrirFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private FragmentDescubrirBinding binding;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    public DescubrirFragment() {
-        // Required empty public constructor
-    }
+    public DescubrirFragment() { }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment descubrir_fragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static DescubrirFragment newInstance(String param1, String param2) {
         DescubrirFragment fragment = new DescubrirFragment();
         Bundle args = new Bundle();
@@ -57,10 +42,30 @@ public class DescubrirFragment extends Fragment {
         }
     }
 
+    // AQUÍ se crea el binding correctamente
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_descubrir, container, false);
+
+        binding = FragmentDescubrirBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    // AQUÍ ya puedes usar binding sin error
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding.fbtnAgregarMascota.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), AgregarMascotaActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    // Muy importante en fragments con binding
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

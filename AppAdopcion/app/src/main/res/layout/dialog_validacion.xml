@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/dialog_validacion.xml -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Ícono -->
+        <ImageView
+            android:id="@+id/ivDialogIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/outline_assignment_late_24" />
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvDialogTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#1C1B1F"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Mensaje -->
+        <TextView
+            android:id="@+id/tvDialogMensaje"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#49454F"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Botón -->
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnDialogAceptar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Entendido"
+            android:textColor="#FFFFFF"
+            style="@style/Widget.Material3.Button"
+            android:backgroundTint="#6B3FA8"
+            app:cornerRadius="12dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+    </LinearLayout>
+</layout>

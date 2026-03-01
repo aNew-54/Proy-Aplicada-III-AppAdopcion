@@ -56,21 +56,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getLoginSuccess().observe(this, result -> {
-            if (result != null) {
-                SessionManager session = new SessionManager(this);
+        // Observar cuando el flujo de login (Auth + Rol) termina con éxito
+        viewModel.getLoginSuccess().observe(this, authResponse -> {
+            if (authResponse != null) {
+                int idRefugio = viewModel.getIdRefugio().getValue() != null
+                        ? viewModel.getIdRefugio().getValue() : -1;
+                int idAdoptante = viewModel.getIdAdoptante().getValue() != null
+                        ? viewModel.getIdAdoptante().getValue() : -1;
 
-                // 1. Guardar la sesión base
-                session.guardarSesion(result.uuid, result.token, result.rol);
-
-                // 2. Guardar el ID numérico según corresponda
-                if ("Adoptante".equals(result.rol)) {
-                    session.guardarIdAdoptante(result.idAsociado);
-                } else if ("Refugio".equals(result.rol)) {
-                    // Si en un futuro agregas 'guardarIdRefugio' a tu SessionManager, lo harías aquí:
-                    // session.guardarIdRefugio(result.idAsociado);
-                }
-
+                new SessionManager(this).guardarSesion(
+                        authResponse.getUser().getId(),
+                        authResponse.getAccessToken(),
+                        authResponse.getRol(),
+                        idRefugio,
+                        idAdoptante// ← ahora guarda el id real del refugio
+                );
                 irAlMain();
             }
         });

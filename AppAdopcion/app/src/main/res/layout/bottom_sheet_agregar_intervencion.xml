@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data></data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="32dp"
+        android:background="@drawable/bg_card_rounded_top">
+
+        <!-- Indicador de arrastre -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_drag_handle_purple" />
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nueva intervención"
+            android:textColor="#1C1B1F"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="12dp" />
+
+        <!-- Divisor -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D0BCFF"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Título intervención -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTituloIntervencion"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="12dp"
+            android:hint="Título intervención"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxStrokeColor="#A468EF"
+            app:hintTextColor="#7B3FC4"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTituloIntervencion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
+                android:textColor="#1C1B1F" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Descripción intervención -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDescripcionIntervencion"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="12dp"
+            android:hint="Descripción intervención"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxStrokeColor="#A468EF"
+            app:hintTextColor="#7B3FC4"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDescripcionIntervencion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:textColor="#1C1B1F" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Fecha intervención -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFechaIntervencion"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="20dp"
+            android:hint="Fecha intervención"
+            app:placeholderText="dd/mm/aaaa"
+            app:placeholderTextColor="#9E77C8"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconTint="#A468EF"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxStrokeColor="#A468EF"
+            app:hintTextColor="#7B3FC4"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFechaIntervencion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:focusable="false"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Divisor -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D0BCFF"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Botón Guardar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGuardarIntervencion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:text="Guardar intervención"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            style="@style/Widget.Material3.Button"
+            android:backgroundTint="#A468EF"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+</layout>

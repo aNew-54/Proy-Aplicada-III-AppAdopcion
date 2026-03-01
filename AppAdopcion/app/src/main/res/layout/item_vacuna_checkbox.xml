@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/item_vacuna_checkbox.xml -->
+<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cbVacuna"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:textColor="#1C1B1F"
+    android:textSize="15sp"
+    android:button="@null"
+    android:drawableEnd="@drawable/ic_checkbox_selector_purple"
+    android:gravity="center_vertical"
+    android:background="?attr/selectableItemBackground" />
