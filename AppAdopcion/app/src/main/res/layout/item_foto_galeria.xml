@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="110dp"
+    android:layout_height="120dp"
+    android:layout_marginEnd="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#B8A0E8"
+    app:strokeWidth="1dp">
+
+    <ImageView
+        android:id="@+id/ivFotoGaleria"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="top"
+        android:background="#55000000" />
+
+    <TextView
+        android:id="@+id/tvEliminarFoto"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:text="Eliminar"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground" />
+
+</com.google.android.material.card.MaterialCardView>

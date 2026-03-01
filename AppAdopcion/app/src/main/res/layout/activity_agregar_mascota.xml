@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data></data>
+
+    <ScrollView
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F0EBF8"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Header con gradiente púrpura -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_header_gradient"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="24dp">
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_back_button"
+                    android:contentDescription="Atrás"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:text="Agregar nueva mascota"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- Tarjeta principal con contenido -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_rounded_top"
+                android:layout_marginTop="-16dp"
+                android:paddingTop="24dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="32dp">
+
+                <!-- Nombre -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilNombre"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:maxLength="30"
+                    android:hint="Nombre de la mascota"
+                    app:placeholderText="Ingrese el nombre de la mascota"
+                    app:placeholderTextColor="#9370C8"
+                    app:endIconMode="clear_text"
+                    app:boxStrokeColor="#9370C8"
+                    app:hintTextColor="#6B3FA8"
+                    app:boxStrokeWidth="1dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxBackgroundColor="#FFFFFF">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="30"
+                        android:inputType="textPersonName"
+                        android:textColor="#1C1B1F" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Edad: Años y Meses -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilEdadAnios"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:maxLength="3"
+                        android:hint="Edad (Años)"
+                        app:placeholderText="Ingrese años"
+                        app:placeholderTextColor="#9370C8"
+                        app:endIconMode="clear_text"
+                        app:boxStrokeColor="#9370C8"
+                        app:hintTextColor="#6B3FA8"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxBackgroundColor="#FFFFFF">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEdadAnios"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="3"
+                            android:inputType="number"
+                            android:textColor="#1C1B1F" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilEdadMeses"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:maxLength="2"
+                        android:hint="Edad (Meses)"
+                        app:placeholderText="Ingrese meses"
+                        app:placeholderTextColor="#9370C8"
+                        app:endIconMode="clear_text"
+                        app:boxStrokeColor="#9370C8"
+                        app:hintTextColor="#6B3FA8"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxBackgroundColor="#FFFFFF">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEdadMeses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="2"
+                            android:inputType="number"
+                            android:textColor="#1C1B1F" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- Especie y Raza -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilEspecie"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:hint="Especie"
+                        app:boxStrokeColor="#9370C8"
+                        app:hintTextColor="#6B3FA8"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxBackgroundColor="#FFFFFF">
+                        <AutoCompleteTextView
+                            android:id="@+id/actvEspecie"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:text="Seleccione Especie"
+                            android:textSize="11sp"
+                            android:textColor="#9370C8" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilRaza"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:hint="Raza"
+                        app:boxStrokeColor="#9370C8"
+                        app:hintTextColor="#6B3FA8"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxBackgroundColor="#FFFFFF">
+                        <AutoCompleteTextView
+                            android:id="@+id/actvRaza"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:text="Seleccione Raza"
+                            android:textSize="11sp"
+                            android:textColor="#9370C8" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- Género -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilGenero"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Género"
+                    app:boxStrokeColor="#9370C8"
+                    app:hintTextColor="#6B3FA8"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxBackgroundColor="#FFFFFF">
+                    <AutoCompleteTextView
+                        android:id="@+id/actvGenero"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:text="Seleccione el género"
+                        android:textSize="14sp"
+                        android:textColor="#9370C8" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Temperamento -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTemperamento"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Temperamento"
+                    app:placeholderText="Ingrese el temperamento de la mascota"
+                    app:placeholderTextColor="#9370C8"
+                    app:endIconMode="clear_text"
+                    app:boxStrokeColor="#9370C8"
+                    app:hintTextColor="#6B3FA8"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxBackgroundColor="#FFFFFF">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTemperamento"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:textColor="#1C1B1F" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Historia -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilHistoria"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Historia"
+                    app:placeholderText="Ingrese la historia de la mascota"
+                    app:placeholderTextColor="#9370C8"
+                    app:endIconMode="clear_text"
+                    app:boxStrokeColor="#9370C8"
+                    app:hintTextColor="#6B3FA8"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxBackgroundColor="#FFFFFF">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etHistoria"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:minLines="3"
+                        android:gravity="top"
+                        android:textColor="#1C1B1F" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Imagen de portada -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Imagen de portada"
+                    android:textColor="#6B3FA8"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/flImagenPortada"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#B8A0E8"
+                    app:strokeWidth="1dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#EDE7F6">
+                        <ImageView
+                            android:id="@+id/ivPortada"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone" />
+                        <LinearLayout
+                            android:id="@+id/llPlaceholderPortada"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/outline_add_a_photo_24"
+                                app:tint="#9370C8" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Toca para añadir foto"
+                                android:textColor="#9370C8"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:padding="12dp"
+                            android:text="Añadir imagen de portada"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:background="#66000000" />
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Galería -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Galería de imágenes"
+                    android:textColor="#6B3FA8"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#B8A0E8"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#EDE7F6">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="none"
+                        android:padding="10dp"
+                        android:fillViewport="false">
+
+                        <!--
+                            llGaleriaContenedor ahora empieza VACÍO.
+                            Los items se añaden dinámicamente desde la Activity
+                            al observar viewModel.getListaGaleria()
+                        -->
+                        <LinearLayout
+                            android:id="@+id/llGaleriaContenedor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical" />
+
+                    </HorizontalScrollView>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAnadirImagen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:text="+ Añadir imagen"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:backgroundTint="#9370C8"
+                    app:cornerRadius="12dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAnadirVacunas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:text="+ Añadir vacunas"
+                    android:textColor="@color/btn_vacunas_text_color"
+                    android:textSize="14sp"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    app:strokeColor="@color/btn_vacunas_stroke_color"
+                    app:cornerRadius="12dp" />
+
+                <!-- Intervenciones médicas -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Intervenciones médicas"
+                    android:textColor="#6B3FA8"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#B8A0E8"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#EDE7F6">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="100dp"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="220dp"
+                            android:scrollbars="none">
+                            <!-- Empieza vacío, los items se inflan dinámicamente -->
+                            <LinearLayout
+                                android:id="@+id/llIntervencionesContenedor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" />
+                        </ScrollView>
+
+                        <!-- Visible por defecto mientras no haya intervenciones -->
+                        <TextView
+                            android:id="@+id/tvSinIntervenciones"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="16dp"
+                            android:text="Sin intervenciones registradas"
+                            android:textColor="#B8A0E8"
+                            android:textSize="13sp"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAnadirIntervencion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:text="+ Añadir intervención"
+                    android:textColor="#6B3FA8"
+                    android:textSize="14sp"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    app:strokeColor="#9370C8"
+                    app:cornerRadius="12dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ProgressBar
+                        android:id="@+id/progressGuardando"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:indeterminate="true"
+                        android:indeterminateTint="#9370C8"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvGuardando"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="6dp"
+                        android:text="Guardando mascota..."
+                        android:textColor="#9370C8"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <!-- Botón final -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAgregarMascota"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Agregar mascota"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingVertical="14dp"
+                    style="@style/Widget.Material3.Button"
+                    android:backgroundTint="#6B3FA8"
+                    app:cornerRadius="16dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

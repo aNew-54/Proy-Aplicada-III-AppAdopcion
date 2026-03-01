@@ -1,5 +1,7 @@
 package unc.edu.pe.appadopcion.vm.perfil;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,6 +11,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.data.model.RefugioResponse;
 import unc.edu.pe.appadopcion.data.model.SolicitudResponse;
 import unc.edu.pe.appadopcion.data.repository.AppRepository;
@@ -25,19 +28,24 @@ public class RefugioPerfilViewModel extends ViewModel {
     public LiveData<RefugioResponse> getPerfil() { return perfil; }
     public LiveData<List<SolicitudResponse>> getSolicitudes() { return solicitudes; }
 
-    public void cargarDatosCompletos(String uuid, String token) {
+    public void cargarDatosCompletos(String uuid, String token, Context context) {
         isLoading.setValue(true);
         AppRepository repo = new AppRepository(token);
 
-        // 1. Obtenemos el perfil del refugio
         repo.obtenerRefugioPorUuid(uuid, new Callback<List<RefugioResponse>>() {
             @Override
-            public void onResponse(Call<List<RefugioResponse>> call, Response<List<RefugioResponse>> resp) {
+            public void onResponse(Call<List<RefugioResponse>> call,
+                                   Response<List<RefugioResponse>> resp) {
                 if (resp.isSuccessful() && resp.body() != null && !resp.body().isEmpty()) {
                     RefugioResponse refugio = resp.body().get(0);
                     perfil.setValue(refugio);
 
-                    // 2. Automáticamente pedimos las solicitudes recibidas usando el ID obtenido
+                    // Actualiza el idRefugio en sesión si aún no estaba guardado
+                    SessionManager session = new SessionManager(context);
+                    if (session.getIdRefugio() == -1) {
+                        session.guardarSesion(uuid, token, "Refugio", refugio.idRefugio);
+                    }
+
                     cargarSolicitudesRecibidas(repo, refugio.idRefugio);
                 } else {
                     isLoading.setValue(false);

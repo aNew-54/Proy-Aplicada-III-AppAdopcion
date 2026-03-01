@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.descubrir.DescubrirFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+    </data>
+
+    <!-- UNA SOLA RAIZ -->
+    <FrameLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".ui.descubrir.DescubrirFragment">
 
-</FrameLayout>
+        <!-- FLOATING BUTTON -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fbtnAgregarMascota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+
+            android:contentDescription="Agregar mascota"
+            android:src="@drawable/outline_add_2_24"
+            app:backgroundTint="@color/md_theme_primary"
+            app:elevation="6dp"
+            app:tint="@android:color/white" />
+
+    </FrameLayout>
+</layout>

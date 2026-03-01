@@ -59,11 +59,14 @@ public class LoginActivity extends AppCompatActivity {
         // Observar cuando el flujo de login (Auth + Rol) termina con éxito
         viewModel.getLoginSuccess().observe(this, authResponse -> {
             if (authResponse != null) {
-                // Extraemos todo directamente del AuthResponse modificado
+                int idRefugio = viewModel.getIdRefugio().getValue() != null
+                        ? viewModel.getIdRefugio().getValue() : -1;
+
                 new SessionManager(this).guardarSesion(
                         authResponse.getUser().getId(),
                         authResponse.getAccessToken(),
-                        authResponse.getRol() // Obtenemos el rol que el ViewModel inyectó
+                        authResponse.getRol(),
+                        idRefugio  // ← ahora guarda el id real del refugio
                 );
                 irAlMain();
             }

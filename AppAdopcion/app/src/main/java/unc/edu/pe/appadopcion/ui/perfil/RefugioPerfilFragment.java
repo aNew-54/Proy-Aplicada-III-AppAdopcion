@@ -48,7 +48,7 @@ public class RefugioPerfilFragment extends Fragment {
 
         // Evita recargar los datos si el ViewModel ya los tiene (ej: al girar la pantalla)
         if (viewModel.getPerfil().getValue() == null) {
-            viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
+            viewModel.cargarDatosCompletos(session.getUuid(), session.getToken(), requireContext());
         }
 
         binding.btnEditarPerfil.setOnClickListener(v ->

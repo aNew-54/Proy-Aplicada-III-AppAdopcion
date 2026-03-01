@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data></data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="32dp"
+        android:background="@drawable/bg_card_rounded_top">
+
+        <!-- Indicador de arrastre -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_drag_handle_purple" />
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar vacunas"
+            android:textColor="#1C1B1F"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="12dp" />
+
+        <!-- Divisor -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D0BCFF" />
+
+        <!-- Lista de vacunas dinámica -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:scrollbars="none">
+
+            <!-- llVacunasContenedor: aquí se inflan los CheckBox dinámicamente -->
+            <LinearLayout
+                android:id="@+id/llVacunasContenedor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
+
+        </ScrollView>
+
+        <!-- Divisor -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D0BCFF" />
+
+        <!-- Botón Confirmar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirmarVacunas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="16dp"
+            android:text="Confirmar selección"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            style="@style/Widget.Material3.Button"
+            android:backgroundTint="#A468EF"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+</layout>
