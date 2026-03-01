@@ -17,6 +17,10 @@
         android:theme="@style/Theme.AppAdopcion">
         <activity
             android:name=".ui.mascotas.AgregarMascotaActivity"
+            android:name=".ui.perfil.EditarPerfilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mascotas.EditarMascota"
             android:exported="false" />
 
         <meta-data

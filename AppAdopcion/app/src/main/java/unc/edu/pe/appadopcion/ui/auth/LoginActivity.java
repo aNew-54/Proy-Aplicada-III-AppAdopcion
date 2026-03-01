@@ -61,12 +61,15 @@ public class LoginActivity extends AppCompatActivity {
             if (authResponse != null) {
                 int idRefugio = viewModel.getIdRefugio().getValue() != null
                         ? viewModel.getIdRefugio().getValue() : -1;
+                int idAdoptante = viewModel.getIdAdoptante().getValue() != null
+                        ? viewModel.getIdAdoptante().getValue() : -1;
 
                 new SessionManager(this).guardarSesion(
                         authResponse.getUser().getId(),
                         authResponse.getAccessToken(),
                         authResponse.getRol(),
-                        idRefugio  // ← ahora guarda el id real del refugio
+                        idRefugio,
+                        idAdoptante// ← ahora guarda el id real del refugio
                 );
                 irAlMain();
             }

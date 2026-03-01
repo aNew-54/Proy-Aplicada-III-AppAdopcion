@@ -1,11 +1,15 @@
 package unc.edu.pe.appadopcion.ui.perfil;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,6 +24,7 @@ import unc.edu.pe.appadopcion.data.model.RefugioResponse;
 import unc.edu.pe.appadopcion.data.model.SolicitudResponse;
 import unc.edu.pe.appadopcion.databinding.FragmentRefugioPerfilBinding;
 import unc.edu.pe.appadopcion.ui.main.MainActivity;
+import unc.edu.pe.appadopcion.ui.perfil.adapters.SolicitudesRefugioAdapter;
 import unc.edu.pe.appadopcion.utils.ImageLoader;
 import unc.edu.pe.appadopcion.vm.perfil.RefugioPerfilViewModel;
 
@@ -28,6 +33,16 @@ public class RefugioPerfilFragment extends Fragment {
     private FragmentRefugioPerfilBinding binding;
     private SessionManager session;
     private RefugioPerfilViewModel viewModel;
+
+    // --- NUEVO: ESCUCHADOR DE LA ACTIVIDAD DE EDICIÓN ---
+    private final ActivityResultLauncher<Intent> editarPerfilLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                // Si la actividad devolvió RESULT_OK, significa que guardó cambios.
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // FORZAMOS LA RECARGA DE DATOS SIN IMPORTAR SI YA HABÍA ALGO EN MEMORIA
+                    viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
+                }
+            });
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -46,16 +61,32 @@ public class RefugioPerfilFragment extends Fragment {
 
         configurarObservadores();
 
-        // Evita recargar los datos si el ViewModel ya los tiene (ej: al girar la pantalla)
+        // Carga inicial (Evita recargar al girar la pantalla)
         if (viewModel.getPerfil().getValue() == null) {
             viewModel.cargarDatosCompletos(session.getUuid(), session.getToken(), requireContext());
         }
 
-        binding.btnEditarPerfil.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Editar perfil — próximamente", Toast.LENGTH_SHORT).show());
+        // --- NUEVO: BOTÓN CONECTADO AL LAUNCHER ---
+        binding.btnEditarPerfil.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), EditarPerfilActivity.class);
+            editarPerfilLauncher.launch(intent);
+        });
 
-        binding.btnVerMascotas.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Mis mascotas — próximamente", Toast.LENGTH_SHORT).show());
+        binding.btnVerMascotas.setOnClickListener(v -> {
+            RefugioResponse refugio = viewModel.getPerfil().getValue();
+            if (refugio != null) {
+                MisMascotasFragment fragment = new MisMascotasFragment();
+                Bundle args = new Bundle();
+                args.putInt("id_refugio", refugio.idRefugio);
+                fragment.setArguments(args);
+
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         binding.btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
     }
@@ -84,6 +115,7 @@ public class RefugioPerfilFragment extends Fragment {
                 cargarSolicitudesEnUI(solicitudes);
             }
         });
+
     }
 
     private void mostrarDatos(RefugioResponse r) {

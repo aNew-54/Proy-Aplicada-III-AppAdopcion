@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import unc.edu.pe.appadopcion.data.model.AdoptanteResponse;
 import unc.edu.pe.appadopcion.data.model.AuthResponse;
 import unc.edu.pe.appadopcion.data.model.RefugioResponse;
 import unc.edu.pe.appadopcion.data.model.UsuarioRequest;
@@ -19,8 +20,6 @@ public class LoginViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isLoading    = new MutableLiveData<>(false);
     private final MutableLiveData<String> errorMessage  = new MutableLiveData<>();
     private final MutableLiveData<AuthResponse> loginSuccess = new MutableLiveData<>();
-
-    // idRefugio expuesto para que la Activity lo guarde en SessionManager
     private final MutableLiveData<Integer> idRefugioLiveData = new MutableLiveData<>(-1);
 
     public LiveData<Boolean> getIsLoading()          { return isLoading; }
@@ -30,7 +29,6 @@ public class LoginViewModel extends ViewModel {
 
     public void iniciarSesion(String email, String password) {
         isLoading.setValue(true);
-
         AppRepository repoAnon = new AppRepository();
         repoAnon.login(email, password, new Callback<AuthResponse>() {
             @Override
@@ -53,27 +51,18 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
-    private void obtenerRolUsuario(String uuid, String token, AuthResponse authResponse) {
+    // PASO 2: Obtener el Rol
+    private void obtenerRolUsuario(String uuid, String token) {
         AppRepository repoAuth = new AppRepository(token);
         repoAuth.obtenerUsuario(uuid, new Callback<List<UsuarioRequest>>() {
             @Override
             public void onResponse(Call<List<UsuarioRequest>> call, Response<List<UsuarioRequest>> r) {
                 if (r.isSuccessful() && r.body() != null && !r.body().isEmpty()) {
-                    UsuarioRequest usuario = r.body().get(0);
-                    authResponse.setRol(usuario.getRol());
-
-                    // Si es refugio → obtener id_refugio antes de emitir el éxito
-                    if ("Refugio".equals(usuario.getRol())) {
-                        obtenerIdRefugio(uuid, token, authResponse);
-                    } else {
-                        // Adoptante → guardar con idRefugio = -1
-                        idRefugioLiveData.setValue(-1);
-                        isLoading.setValue(false);
-                        loginSuccess.setValue(authResponse);
-                    }
+                    String rol = r.body().get(0).getRol();
+                    obtenerPerfilEspecifico(uuid, token, rol);
                 } else {
                     isLoading.setValue(false);
-                    errorMessage.setValue("Error: cuenta incompleta");
+                    errorMessage.setValue("Error: cuenta sin rol asignado");
                 }
             }
             @Override
@@ -112,5 +101,48 @@ public class LoginViewModel extends ViewModel {
                 loginSuccess.setValue(authResponse);
             }
         });
+      
+    // PASO 3: Obtener el ID numérico correspondiente (Adoptante o Refugio)
+    private void obtenerPerfilEspecifico(String uuid, String token, String rol) {
+        AppRepository repoAuth = new AppRepository(token);
+
+        if ("Adoptante".equals(rol)) {
+            repoAuth.obtenerAdoptanteCompleto(uuid, new Callback<List<AdoptanteResponse>>() {
+                @Override
+                public void onResponse(Call<List<AdoptanteResponse>> call, Response<List<AdoptanteResponse>> res) {
+                    isLoading.setValue(false);
+                    if (res.isSuccessful() && res.body() != null && !res.body().isEmpty()) {
+                        int idAdoptante = res.body().get(0).idAdoptante;
+                        loginSuccess.setValue(new LoginResult(uuid, token, rol, idAdoptante));
+                    } else {
+                        errorMessage.setValue("No se encontró el perfil de adoptante.");
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<AdoptanteResponse>> call, Throwable t) {
+                    isLoading.setValue(false);
+                    errorMessage.setValue("Error al descargar perfil de adoptante.");
+                }
+            });
+        } else {
+            // Es Refugio
+            repoAuth.obtenerRefugioPorUuid(uuid, new Callback<List<RefugioResponse>>() {
+                @Override
+                public void onResponse(Call<List<RefugioResponse>> call, Response<List<RefugioResponse>> res) {
+                    isLoading.setValue(false);
+                    if (res.isSuccessful() && res.body() != null && !res.body().isEmpty()) {
+                        int idRefugio = res.body().get(0).idRefugio;
+                        loginSuccess.setValue(new LoginResult(uuid, token, rol, idRefugio));
+                    } else {
+                        errorMessage.setValue("No se encontró el perfil de refugio.");
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<RefugioResponse>> call, Throwable t) {
+                    isLoading.setValue(false);
+                    errorMessage.setValue("Error al descargar perfil de refugio.");
+                }
+            });
+        }
     }
 }
