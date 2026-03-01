@@ -40,7 +40,7 @@ public class RefugioPerfilFragment extends Fragment {
                 // Si la actividad devolvió RESULT_OK, significa que guardó cambios.
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     // FORZAMOS LA RECARGA DE DATOS SIN IMPORTAR SI YA HABÍA ALGO EN MEMORIA
-                    viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
+                    viewModel.cargarDatosCompletos(session.getUuid(), session.getToken(),requireContext());
                 }
             });
 

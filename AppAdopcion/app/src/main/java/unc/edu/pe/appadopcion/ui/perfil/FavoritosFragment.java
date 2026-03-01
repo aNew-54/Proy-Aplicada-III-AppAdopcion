@@ -18,7 +18,7 @@ import unc.edu.pe.appadopcion.data.repository.AppRepository;
 import unc.edu.pe.appadopcion.databinding.FragmentFavoritosBinding;
 import unc.edu.pe.appadopcion.ui.mascotas.DetalleMascotaFragment;
 import unc.edu.pe.appadopcion.ui.perfil.adapters.FavoritosAdapter;
-import unc.edu.pe.appadopcion.vm.favoritos.FavoritosViewModel;
+import unc.edu.pe.appadopcion.vm.perfil.FavoritosViewModel;
 
 public class FavoritosFragment extends Fragment {
 

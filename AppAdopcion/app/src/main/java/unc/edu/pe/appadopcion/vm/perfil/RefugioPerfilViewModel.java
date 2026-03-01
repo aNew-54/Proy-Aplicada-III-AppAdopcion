@@ -43,7 +43,7 @@ public class RefugioPerfilViewModel extends ViewModel {
                     // Actualiza el idRefugio en sesión si aún no estaba guardado
                     SessionManager session = new SessionManager(context);
                     if (session.getIdRefugio() == -1) {
-                        session.guardarSesion(uuid, token, "Refugio", refugio.idRefugio);
+                        session.guardarSesion(uuid, token, "Refugio", refugio.idRefugio,-1);
                     }
 
                     cargarSolicitudesRecibidas(repo, refugio.idRefugio);

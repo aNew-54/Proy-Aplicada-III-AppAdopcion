@@ -17,12 +17,13 @@
         android:theme="@style/Theme.AppAdopcion">
         <activity
             android:name=".ui.mascotas.AgregarMascotaActivity"
-            android:name=".ui.perfil.EditarPerfilActivity"
             android:exported="false" />
         <activity
             android:name=".ui.mascotas.EditarMascota"
             android:exported="false" />
-
+        <activity
+            android:name=".ui.perfil.EditarPerfilActivity"
+            android:exported="false" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${mapsApiKey}" />

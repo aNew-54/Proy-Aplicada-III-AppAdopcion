@@ -19,27 +19,24 @@ public class SessionManager {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    /** Login de adoptante (sin idRefugio) */
-    public void guardarSesion(String uuid, String token, String rol) {
+    /** Guarda absolutamente toda la sesión en un solo paso */
+    public void guardarSesion(String uuid, String token, String rol, int idRefugio, int idAdoptante) {
         prefs.edit()
                 .putBoolean(KEY_LOGGED_IN, true)
                 .putString(KEY_UUID, uuid)
                 .putString(KEY_TOKEN, token)
                 .putString(KEY_ROL, rol)
-                .putInt(KEY_ID_REFUGIO, -1)
-                .putInt(KEY_ID_ADOPTANTE, -1)
+                .putInt(KEY_ID_REFUGIO, idRefugio)
+                .putInt(KEY_ID_ADOPTANTE, idAdoptante)
                 .apply();
-    }
-
-    // NUEVO MÉTODO
-    public void guardarIdAdoptante(int idAdoptante) {
-        prefs.edit().putInt(KEY_ID_ADOPTANTE, idAdoptante).apply();
     }
 
     public boolean isLoggedIn()  { return prefs.getBoolean(KEY_LOGGED_IN, false); }
     public String  getUuid()     { return prefs.getString(KEY_UUID, null); }
     public String  getToken()    { return prefs.getString(KEY_TOKEN, null); }
     public String  getRol()      { return prefs.getString(KEY_ROL, null); }
+
+    // Si el usuario no es de este rol, devolverá -1
     public int     getIdRefugio() { return prefs.getInt(KEY_ID_REFUGIO, -1); }
     public int     getIdAdoptante() { return prefs.getInt(KEY_ID_ADOPTANTE, -1); }
 

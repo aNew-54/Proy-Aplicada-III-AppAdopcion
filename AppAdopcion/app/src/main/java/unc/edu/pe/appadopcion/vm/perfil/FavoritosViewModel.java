@@ -1,4 +1,4 @@
-package unc.edu.pe.appadopcion.vm.favoritos;
+package unc.edu.pe.appadopcion.vm.perfil;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
