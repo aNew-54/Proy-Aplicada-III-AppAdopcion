@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivRefugioLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Corner.Circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNombreRefugio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvDireccionRefugio"
+            app:layout_constraintEnd_toStartOf="@+id/btnOpcionesCard"
+            app:layout_constraintStart_toEndOf="@id/ivRefugioLogo"
+            app:layout_constraintTop_toTopOf="@id/ivRefugioLogo"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Refugio Patitas Amorosas" />
+
+        <TextView
+            android:id="@+id/tvDireccionRefugio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            app:layout_constraintBottom_toBottomOf="@id/ivRefugioLogo"
+            app:layout_constraintEnd_toEndOf="@id/tvNombreRefugio"
+            app:layout_constraintStart_toStartOf="@id/tvNombreRefugio"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreRefugio"
+            tools:text="Jr San Martin 123" />
+
+        <ImageButton
+            android:id="@+id/btnOpcionesCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_more_vert"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/ivRefugioLogo"/>
+
+        <ImageView
+            android:id="@+id/ivMascotaFoto"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="centerCrop"
+            android:background="#F5F5F5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivRefugioLogo" />
+
+        <TextView
+            android:id="@+id/tvNombreMascota"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/btnFavorito"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivMascotaFoto"
+            tools:text="Osa" />
+
+        <TextView
+            android:id="@+id/tvRazaSexo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            app:layout_constraintEnd_toEndOf="@id/tvNombreMascota"
+            app:layout_constraintStart_toStartOf="@id/tvNombreMascota"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreMascota"
+            tools:text="Perro / Hembra" />
+
+        <ImageView
+            android:id="@+id/btnFavorito"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_heart_outline"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@id/tvRazaSexo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvNombreMascota" />
+
+        <TextView
+            android:id="@+id/tvHistoriaResumen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="13sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRazaSexo"
+            tools:text="Osa es una cooker con algunos años de vida, muy amorosa y tranquila" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

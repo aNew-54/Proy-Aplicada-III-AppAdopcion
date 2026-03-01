@@ -10,7 +10,7 @@ import unc.edu.pe.appadopcion.R;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.databinding.ActivityMainBinding;
 import unc.edu.pe.appadopcion.ui.auth.WelcomeActivity;
-import unc.edu.pe.appadopcion.ui.descubrir.DescubrirFragment;
+import unc.edu.pe.appadopcion.ui.feed.DescubrirFragment;
 import unc.edu.pe.appadopcion.ui.refugios.RefugiosFragment;
 import unc.edu.pe.appadopcion.ui.perfil.PerfilFragment;
 

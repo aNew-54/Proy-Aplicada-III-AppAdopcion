@@ -46,4 +46,6 @@ public class MascotaResponse implements Serializable{
     public String portadaRefugio;
     @SerializedName("telefonorefugio")
     public String telefonoRefugio;
+    @SerializedName("perfilrefugio")
+    public String perfilRefugio;
 }

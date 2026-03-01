@@ -1,33 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
 
-    <data>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-    </data>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:startIconDrawable="@drawable/ic_search"
+            app:boxCornerRadiusTopStart="28dp"
+            app:boxCornerRadiusTopEnd="28dp"
+            app:boxCornerRadiusBottomStart="28dp"
+            app:boxCornerRadiusBottomEnd="28dp"
+            app:boxBackgroundColor="#F0F0F0"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
 
-    <!-- UNA SOLA RAIZ -->
-    <FrameLayout
-        android:id="@+id/main"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBuscar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Buscar por nombre, raza, especie"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupFiltros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true">
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvOrdenActual"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Orden: Fechas recientes"
+                android:textColor="?colorPrimary"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"/>
+
+            <TextView
+                android:id="@+id/btnFiltrosAvanzados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filtros ▼"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutFiltrosAvanzados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="16dp"
+            android:visibility="gone"
+            android:background="#F9F9F9">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ordenar por:"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#333333"/>
+
+            <RadioGroup
+                android:id="@+id/rgTipoOrden"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/rbOrdenFecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha"
+                    android:checked="true"/>
+                <RadioButton
+                    android:id="@+id/rbOrdenFavoritos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Popularidad"
+                    android:layout_marginStart="16dp"/>
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dirección de orden:"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#333333"/>
+
+            <RadioGroup
+                android:id="@+id/rgDireccionOrden"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/rbDescendente"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Más recientes"
+                    android:checked="true"/>
+                <RadioButton
+                    android:id="@+id/rbAscendente"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Más antiguos"
+                    android:layout_marginStart="16dp"/>
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Etapa de vida (Edad):"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:textColor="#333333"/>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupEdad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:singleSelection="true"
+                app:selectionRequired="false">
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cachorro (0 - 1 año)"/>
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Joven (1 - 3 años)"/>
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adulto (3 - 7 años)"/>
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Senior (Más de 7 años)"/>
+            </com.google.android.material.chip.ChipGroup>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            android:layout_marginHorizontal="16dp"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMascotas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.descubrir.DescubrirFragment">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="80dp"
+        tools:listitem="@layout/item_mascota"/>
 
-        <!-- FLOATING BUTTON -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fbtnAgregarMascota"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="40dp"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
-            android:contentDescription="Agregar mascota"
-            android:src="@drawable/outline_add_2_24"
-            app:backgroundTint="@color/md_theme_primary"
-            app:elevation="6dp"
-            app:tint="@android:color/white" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fbtnAgregarMascota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="40dp"
+        android:contentDescription="Agregar mascota"
+        android:src="@drawable/outline_add_2_24"
+        android:visibility="gone"
+        app:backgroundTint="@color/md_theme_primary"
+        app:elevation="6dp"
+        app:tint="@android:color/white" />
 
-    </FrameLayout>
-</layout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
