@@ -67,7 +67,6 @@ public class MisMascotasViewModel extends ViewModel {
         especiesUnicas.add("Todas"); // Opción por defecto
 
         for (MascotaResponse m : lista) {
-            // AQUI USAMOS m.nombreEspecie EN LUGAR DE RAZA
             if (m.nombreEspecie != null && !m.nombreEspecie.isEmpty()) {
                 especiesUnicas.add(m.nombreEspecie);
             }

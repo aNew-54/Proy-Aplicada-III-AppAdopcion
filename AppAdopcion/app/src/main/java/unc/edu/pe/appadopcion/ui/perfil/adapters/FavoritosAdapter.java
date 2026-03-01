@@ -1,4 +1,4 @@
-package unc.edu.pe.appadopcion.ui.favoritos;
+package unc.edu.pe.appadopcion.ui.perfil.adapters;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -21,7 +21,7 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.Favo
 
     // Interfaz para detectar clics y enviar el ID
     public interface OnMascotaClickListener {
-        void onMascotaClick(int idMascota);
+        void onMascotaClick(MascotaResponse mascota);
     }
 
     public FavoritosAdapter(OnMascotaClickListener listener) {
@@ -62,7 +62,7 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.Favo
             binding.getRoot().setOnClickListener(v -> {
                 int position = getBindingAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onMascotaClick(listaMascotas.get(position).idMascota);
+                    listener.onMascotaClick(listaMascotas.get(position));
                 }
             });
         }

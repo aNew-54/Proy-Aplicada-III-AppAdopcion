@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import unc.edu.pe.appadopcion.R;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
@@ -65,9 +64,10 @@ public class AdoptantePerfilFragment extends Fragment {
 
         binding.btnVerFavoritos.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.subFragmentContainer, new unc.edu.pe.appadopcion.ui.favoritos.FavoritosFragment())
+                    .replace(R.id.subFragmentContainer, new FavoritosFragment())
                     .addToBackStack(null)
                     .commit();
+        });
           
         // --- BOTÓN PARA EDITAR EL PERFIL ---
         binding.btnEditarPerfil.setOnClickListener(v -> {

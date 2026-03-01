@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.databinding.FragmentMisMascotasBinding;
+import unc.edu.pe.appadopcion.ui.perfil.adapters.MascotaRefugioAdapter;
 import unc.edu.pe.appadopcion.vm.perfil.MisMascotasViewModel;
 import unc.edu.pe.appadopcion.ui.mascotas.DetalleMascotaFragment;
 import unc.edu.pe.appadopcion.R;

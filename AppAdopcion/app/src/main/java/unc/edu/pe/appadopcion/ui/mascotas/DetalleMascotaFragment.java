@@ -24,8 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.button.MaterialButton;
 
-import org.w3c.dom.Text;
-
 import unc.edu.pe.appadopcion.R;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.data.model.MascotaResponse;
@@ -34,7 +32,7 @@ import unc.edu.pe.appadopcion.databinding.FragmentDetalleMascotaBinding;
 import unc.edu.pe.appadopcion.ui.mascotas.adapters.GaleriaFotosAdapter;
 import unc.edu.pe.appadopcion.ui.mascotas.adapters.IntervencionesAdapter;
 import unc.edu.pe.appadopcion.utils.ImageLoader;
-import unc.edu.pe.appadopcion.vm.mascotas.DetalleMascotaViewModel;
+import unc.edu.pe.appadopcion.vm.perfil.DetalleMascotaViewModel;
 
 public class DetalleMascotaFragment extends Fragment {
 
@@ -139,34 +137,27 @@ public class DetalleMascotaFragment extends Fragment {
         binding.chipRefugio.setText("Refugio " + m.nombreRefugio);
         binding.tvHistoriaMascota.setText(m.historia != null ? m.historia : "Sin historia.");
 
-        // Configurar estado
-        TextView tvTitleEstado = binding.itemEstado.findViewById(R.id.tvItemTitle);
-        TextView tvEstado = binding.itemEstado.findViewById(R.id.tvItemValue);
-        ImageView ivIconEstado = binding.itemEstado.findViewById(R.id.ivItemIcon);
-        ivIconEstado.setImageResource(R.drawable.ic_status);
-        tvTitleEstado.setText("Estado");
-        tvEstado.setText(m.estado);
+        // --- Configurar Estado ---
+        // Accedemos a las vistas DENTRO del include directamente a través de su clase Binding
+        binding.itemEstado.tvItemTitle.setText("Estado");
+        binding.itemEstado.tvItemValue.setText(m.estado);
+        binding.itemEstado.ivItemIcon.setImageResource(R.drawable.ic_status);
 
-        // Configurar genero
-        TextView tvTitleGenero = binding.itemGenero.findViewById(R.id.tvItemTitle);
-        TextView tvGenero = binding.itemGenero.findViewById(R.id.tvItemValue);
-        ImageView ivIconGenero = binding.itemGenero.findViewById(R.id.ivItemIcon);
-        ivIconGenero.setImageResource(R.drawable.ic_gender);
-        tvTitleGenero.setText("Género");
-        tvGenero.setText(m.genero);
+        // --- Configurar Genero ---
+        binding.itemGenero.tvItemTitle.setText("Género");
+        binding.itemGenero.tvItemValue.setText(m.genero);
+        binding.itemGenero.ivItemIcon.setImageResource(R.drawable.ic_gender);
 
-        // Configurar temperamento
-        TextView tvTemperamento = binding.itemTemperamento.findViewById(R.id.tvItemValue);
-        tvTemperamento.setText(m.temperamento != null ? m.temperamento : "No especificado");
+        // --- Configurar Temperamento ---
+        // (Asumo que en tu include el título dice "Temperamento" por defecto, si no, ponlo)
+        binding.itemTemperamento.tvItemTitle.setText("Temperamento");
+        binding.itemTemperamento.tvItemValue.setText(m.temperamento != null ? m.temperamento : "No especificado");
+        // binding.itemTemperamento.ivItemIcon.setImageResource(R.drawable.lo_que_sea); // (Opcional si quieres cambiar el icono)
 
-        // Configurar Edad
-        TextView tvTitleEdad = binding.itemEdad.findViewById(R.id.tvItemTitle);
-        TextView tvEdad  = binding.itemEdad.findViewById(R.id.tvItemValue);
-        ImageView ivIconEdad = binding.itemEdad.findViewById(R.id.ivItemIcon);
-        tvTitleEdad.setText("Edad");
-        tvEdad.setText(m.edadAnios + " años, " + m.edadMeses + " meses");
-        ivIconEdad.setImageResource(R.drawable.ic_age);
-
+        // --- Configurar Edad ---
+        binding.itemEdad.tvItemTitle.setText("Edad");
+        binding.itemEdad.tvItemValue.setText(m.edadAnios + " años, " + m.edadMeses + " meses");
+        binding.itemEdad.ivItemIcon.setImageResource(R.drawable.ic_age);
     }
 
     private void configurarLogicaVistas() {

@@ -1,4 +1,4 @@
-package unc.edu.pe.appadopcion.ui.perfil;
+package unc.edu.pe.appadopcion.ui.perfil.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

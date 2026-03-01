@@ -56,15 +56,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Observar cuando el flujo de login (Auth + Rol) termina con éxito
-        viewModel.getLoginSuccess().observe(this, authResponse -> {
-            if (authResponse != null) {
-                // Extraemos todo directamente del AuthResponse modificado
-                new SessionManager(this).guardarSesion(
-                        authResponse.getUser().getId(),
-                        authResponse.getAccessToken(),
-                        authResponse.getRol() // Obtenemos el rol que el ViewModel inyectó
-                );
+        viewModel.getLoginSuccess().observe(this, result -> {
+            if (result != null) {
+                SessionManager session = new SessionManager(this);
+
+                // 1. Guardar la sesión base
+                session.guardarSesion(result.uuid, result.token, result.rol);
+
+                // 2. Guardar el ID numérico según corresponda
+                if ("Adoptante".equals(result.rol)) {
+                    session.guardarIdAdoptante(result.idAsociado);
+                } else if ("Refugio".equals(result.rol)) {
+                    // Si en un futuro agregas 'guardarIdRefugio' a tu SessionManager, lo harías aquí:
+                    // session.guardarIdRefugio(result.idAsociado);
+                }
+
                 irAlMain();
             }
         });

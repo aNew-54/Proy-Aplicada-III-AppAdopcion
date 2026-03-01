@@ -24,6 +24,7 @@ import unc.edu.pe.appadopcion.data.model.RefugioResponse;
 import unc.edu.pe.appadopcion.data.model.SolicitudResponse;
 import unc.edu.pe.appadopcion.databinding.FragmentRefugioPerfilBinding;
 import unc.edu.pe.appadopcion.ui.main.MainActivity;
+import unc.edu.pe.appadopcion.ui.perfil.adapters.SolicitudesRefugioAdapter;
 import unc.edu.pe.appadopcion.utils.ImageLoader;
 import unc.edu.pe.appadopcion.vm.perfil.RefugioPerfilViewModel;
 

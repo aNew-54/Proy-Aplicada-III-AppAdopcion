@@ -1,4 +1,4 @@
-package unc.edu.pe.appadopcion.ui.favoritos;
+package unc.edu.pe.appadopcion.ui.perfil;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +16,8 @@ import unc.edu.pe.appadopcion.R;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.data.repository.AppRepository;
 import unc.edu.pe.appadopcion.databinding.FragmentFavoritosBinding;
+import unc.edu.pe.appadopcion.ui.mascotas.DetalleMascotaFragment;
+import unc.edu.pe.appadopcion.ui.perfil.adapters.FavoritosAdapter;
 import unc.edu.pe.appadopcion.vm.favoritos.FavoritosViewModel;
 
 public class FavoritosFragment extends Fragment {
@@ -39,17 +41,19 @@ public class FavoritosFragment extends Fragment {
         AppRepository repo = new AppRepository(session.getToken());
 
         // 2. Configurar el Adaptador y el clic hacia el Detalle de Mascota
-        adapter = new FavoritosAdapter(idMascota -> {
+        adapter = new FavoritosAdapter(mascota -> {
 
-            // TODO: Falta activar la navegación a DetalleMascota
-            /* Cuando se suba el gráfico de navegación, se debe descomentar esto y colocar el ID correcto:
             Bundle bundle = new Bundle();
-            bundle.putInt("idMascota", idMascota);
-            androidx.navigation.Navigation.findNavController(view).navigate(R.id.tu_flecha_de_navegacion, bundle);
-            */
+            bundle.putSerializable("mascota", mascota);
 
-            // Prueba
-            Toast.makeText(requireContext(), "¡Clic exitoso! ID de la mascota: " + idMascota, Toast.LENGTH_SHORT).show();
+            DetalleMascotaFragment detalleFragment = new DetalleMascotaFragment();
+            detalleFragment.setArguments(bundle);
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, detalleFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         binding.rvFavoritos.setLayoutManager(new LinearLayoutManager(requireContext()));
