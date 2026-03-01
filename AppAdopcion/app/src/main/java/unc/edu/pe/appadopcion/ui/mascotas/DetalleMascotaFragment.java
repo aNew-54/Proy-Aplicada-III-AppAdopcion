@@ -32,15 +32,15 @@ import unc.edu.pe.appadopcion.databinding.FragmentDetalleMascotaBinding;
 import unc.edu.pe.appadopcion.ui.mascotas.adapters.GaleriaFotosAdapter;
 import unc.edu.pe.appadopcion.ui.mascotas.adapters.IntervencionesAdapter;
 import unc.edu.pe.appadopcion.utils.ImageLoader;
-import unc.edu.pe.appadopcion.vm.perfil.DetalleMascotaViewModel;
+import unc.edu.pe.appadopcion.vm.mascotas.DetalleMascotaViewModel;
 
 public class DetalleMascotaFragment extends Fragment {
 
     private FragmentDetalleMascotaBinding binding;
     private SessionManager session;
     private DetalleMascotaViewModel viewModel;
-
     private MascotaResponse mascotaActual;
+    private boolean debeOcultarMenu = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -68,6 +68,7 @@ public class DetalleMascotaFragment extends Fragment {
         // --- CÓDIGO ACTUALIZADO PARA RECIBIR LA MASCOTA ---
         if (getArguments() != null) {
             mascotaActual = (MascotaResponse) getArguments().getSerializable("mascota");
+            debeOcultarMenu = getArguments().getBoolean("ocultar_menu", false);
         }
 
         configurarLogicaVistas();
@@ -281,6 +282,26 @@ public class DetalleMascotaFragment extends Fragment {
 
         btnCerrarFullFoto.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Solo lo ocultamos si la variable dice que sí
+        if (debeOcultarMenu) {
+            View bottomNav = requireActivity().findViewById(R.id.bottomNavigation); // Pon el ID de tu menú inferior
+            if (bottomNav != null) bottomNav.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Solo lo volvemos a mostrar si nosotros fuimos quienes lo ocultamos
+        if (debeOcultarMenu) {
+            View bottomNav = requireActivity().findViewById(R.id.bottomNavigation);
+            if (bottomNav != null) bottomNav.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

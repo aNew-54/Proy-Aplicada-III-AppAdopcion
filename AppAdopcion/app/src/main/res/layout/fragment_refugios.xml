@@ -1,14 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.refugios.RefugiosFragment">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <!-- AppBar con header estilo Welcome -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_refugios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:liftOnScroll="true">
+
+            <!-- Header decorativo (mismo estilo bg_welcome_top) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_welcome_top"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <!-- Titulo -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Refugios"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textSize="28sp"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Encuentra un refugio cerca de ti"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="13sp"
+                    android:textColor="#CCffffff"
+                    android:layout_marginBottom="14dp" />
+
+                <!-- Buscador -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:startIconDrawable="@android:drawable/ic_menu_search"
+                    app:startIconTint="?attr/colorOnSurfaceVariant"
+                    app:boxCornerRadiusTopStart="28dp"
+                    app:boxCornerRadiusTopEnd="28dp"
+                    app:boxCornerRadiusBottomStart="28dp"
+                    app:boxCornerRadiusBottomEnd="28dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:boxBackgroundColor="@color/white">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_busqueda_refugio"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@null"
+                        android:hint="Buscar refugio..."
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:textSize="14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Toggle Lista / Mapa -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggle_vista_refugios"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_gravity="center_horizontal"
+                    app:checkedButton="@id/btn_vista_lista"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_vista_lista"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="120dp"
+                        android:layout_height="38dp"
+                        android:text="Lista"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        app:strokeColor="@color/white"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_vista_mapa"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="120dp"
+                        android:layout_height="38dp"
+                        android:text="Mapa"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        app:strokeColor="@color/white"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Progress indicator -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_refugios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:indicatorColor="?attr/colorPrimary"
+            app:trackCornerRadius="0dp" />
+
+        <!-- Lista de refugios -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_refugios"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="12dp"
+            android:paddingBottom="80dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <!-- Contenedor del mapa -->
+        <LinearLayout
+            android:id="@+id/contenedor_mapa_refugios"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/map_refugios"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

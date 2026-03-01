@@ -74,6 +74,7 @@ public class MisMascotasFragment extends Fragment {
 
         // Título del Collapsing
         binding.collapsingToolbar.setTitle("Mis Mascotas");
+        binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
     }
 
     private void setupFiltros() {

@@ -63,8 +63,9 @@ public class AdoptantePerfilFragment extends Fragment {
         }
 
         binding.btnVerFavoritos.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.subFragmentContainer, new FavoritosFragment())
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, new FavoritosFragment())
                     .addToBackStack(null)
                     .commit();
         });

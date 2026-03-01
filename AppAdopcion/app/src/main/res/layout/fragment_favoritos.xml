@@ -46,7 +46,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:titleCentered="true" />
+                    app:titleCentered="true"
+                    app:navigationIcon="@drawable/ic_arrow_back"
+                    app:navigationIconTint="@android:color/white" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 

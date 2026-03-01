@@ -55,6 +55,7 @@ public class FavoritosFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+        binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
         binding.rvFavoritos.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvFavoritos.setAdapter(adapter);

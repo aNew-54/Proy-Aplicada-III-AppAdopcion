@@ -217,6 +217,7 @@ public class DescubrirFragment extends Fragment implements MascotaAdapter.OnMasc
         // 2. Empaquetamos la mascota
         Bundle bundle = new Bundle();
         bundle.putSerializable("mascota", mascota);
+        bundle.putBoolean("ocultar_menu", false);
         detalleFragment.setArguments(bundle);
 
         // 3. Hacemos la transición

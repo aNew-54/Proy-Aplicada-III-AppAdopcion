@@ -1,4 +1,4 @@
-package unc.edu.pe.appadopcion.vm.perfil;
+package unc.edu.pe.appadopcion.vm.mascotas;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
