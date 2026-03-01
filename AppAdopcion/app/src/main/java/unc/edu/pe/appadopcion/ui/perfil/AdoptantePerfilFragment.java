@@ -1,26 +1,28 @@
 package unc.edu.pe.appadopcion.ui.perfil;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.util.List;
-
 import unc.edu.pe.appadopcion.R;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.data.model.AdoptanteResponse;
-import unc.edu.pe.appadopcion.data.model.SolicitudResponse;
 import unc.edu.pe.appadopcion.databinding.FragmentAdoptantePerfilBinding;
 import unc.edu.pe.appadopcion.ui.main.MainActivity;
 import unc.edu.pe.appadopcion.utils.ImageLoader;
+// Asegúrate de importar tu ViewModel real del Adoptante
 import unc.edu.pe.appadopcion.vm.perfil.AdoptantePerfilViewModel;
 
 public class AdoptantePerfilFragment extends Fragment {
@@ -28,6 +30,16 @@ public class AdoptantePerfilFragment extends Fragment {
     private FragmentAdoptantePerfilBinding binding;
     private SessionManager session;
     private AdoptantePerfilViewModel viewModel;
+
+    // --- ESCUCHADOR DE LA ACTIVIDAD DE EDICIÓN ---
+    private final ActivityResultLauncher<Intent> editarPerfilLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                // Si la actividad guardó los cambios y devolvió RESULT_OK...
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // ¡Forzamos la recarga de los datos desde Supabase!
+                    viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
+                }
+            });
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -46,22 +58,24 @@ public class AdoptantePerfilFragment extends Fragment {
 
         configurarObservadores();
 
-        // Evita recargar si el ViewModel ya tiene los datos (ej: al girar la pantalla)
+        // Carga inicial (Evita recargar al rotar la pantalla)
         if (viewModel.getPerfil().getValue() == null) {
             viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
         }
 
-        binding.btnEditarPerfil.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Editar perfil — próximamente", Toast.LENGTH_SHORT).show());
-
         binding.btnVerFavoritos.setOnClickListener(v -> {
-
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.subFragmentContainer, new unc.edu.pe.appadopcion.ui.favoritos.FavoritosFragment())
                     .addToBackStack(null)
                     .commit();
+          
+        // --- BOTÓN PARA EDITAR EL PERFIL ---
+        binding.btnEditarPerfil.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), EditarPerfilActivity.class);
+            editarPerfilLauncher.launch(intent);
         });
 
+        // Botón de cerrar sesión
         binding.btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
     }
 
@@ -84,45 +98,33 @@ public class AdoptantePerfilFragment extends Fragment {
             }
         });
 
-        viewModel.getSolicitudes().observe(getViewLifecycleOwner(), solicitudes -> {
-            if (solicitudes != null) {
-                cargarSolicitudesEnUI(solicitudes);
-            }
-        });
+        // Si tienes observadores para favoritos o solicitudes, agrégalos aquí
     }
 
     private void mostrarDatos(AdoptanteResponse a) {
         if (binding == null) return;
 
+        // Concatenamos nombre y apellido
         binding.tvNombreCompleto.setText(a.nombre + " " + a.apellido);
+
+        // Datos de contacto
         binding.tvCorreo.setText(a.correo);
         binding.tvTelefono.setText(a.telefono != null ? a.telefono : "Sin teléfono");
-        binding.tvGenero.setText(a.genero != null ? a.genero : "No especificado");
+        binding.tvGenero.setText(a.genero != null ? a.genero : "Sin especificar");
+        binding.tvUbicacion.setText(a.direccion != null ? a.direccion : "Sin dirección");
+
+        // Mostrar contadores
         binding.tvTotalFavoritos.setText(String.valueOf(a.totalFavoritos));
         binding.tvTotalSolicitudes.setText(String.valueOf(a.totalSolicitudes));
-        binding.tvUbicacion.setText(String.valueOf(a.direccion));
 
+        // Cargar Foto de perfil
         ImageLoader.cargarAvatarCircular(
                 requireContext(),
                 session.getToken(),
                 session.getUuid(),
                 binding.ivFotoPerfil,
-                R.drawable.ic_person
+                R.drawable.ic_person // Usando el placeholder de tu XML
         );
-    }
-
-    private void cargarSolicitudesEnUI(List<SolicitudResponse> lista) {
-        if (binding == null) return;
-
-        if (lista.isEmpty()) {
-            binding.tvSinSolicitudes.setVisibility(View.VISIBLE);
-            binding.rvSolicitudes.setVisibility(View.GONE);
-        } else {
-            binding.tvSinSolicitudes.setVisibility(View.GONE);
-            binding.rvSolicitudes.setVisibility(View.VISIBLE);
-            binding.rvSolicitudes.setLayoutManager(new LinearLayoutManager(requireContext()));
-            binding.rvSolicitudes.setAdapter(new SolicitudesAdoptanteAdapter(lista));
-        }
     }
 
     private void cerrarSesion() {
