@@ -54,8 +54,13 @@ public class AdoptantePerfilFragment extends Fragment {
         binding.btnEditarPerfil.setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Editar perfil — próximamente", Toast.LENGTH_SHORT).show());
 
-        binding.btnVerFavoritos.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Mis favoritos — próximamente", Toast.LENGTH_SHORT).show());
+        binding.btnVerFavoritos.setOnClickListener(v -> {
+
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.subFragmentContainer, new unc.edu.pe.appadopcion.ui.favoritos.FavoritosFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         binding.btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
     }

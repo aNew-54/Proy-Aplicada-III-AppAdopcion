@@ -84,6 +84,7 @@ public class RefugioPerfilFragment extends Fragment {
                 cargarSolicitudesEnUI(solicitudes);
             }
         });
+
     }
 
     private void mostrarDatos(RefugioResponse r) {
