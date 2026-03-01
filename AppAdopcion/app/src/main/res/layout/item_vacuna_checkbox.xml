@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/item_vacuna_checkbox.xml -->
-<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cbVacuna"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="52dp"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
-    android:textColor="#1C1B1F"
-    android:textSize="15sp"
-    android:button="@null"
-    android:drawableEnd="@drawable/ic_checkbox_selector_purple"
-    android:gravity="center_vertical"
-    android:background="?attr/selectableItemBackground" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cbVacuna"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#1C1B1F"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvFechaVacuna"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_date_field"
+            android:padding="8dp"
+            android:text="Seleccionar fecha"
+            android:textColor="#6B3FA8"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>

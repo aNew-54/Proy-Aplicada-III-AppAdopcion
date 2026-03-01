@@ -6,4 +6,7 @@ public class VacunaMascotaResponse {
     @SerializedName("id_mascota")        public int    idMascota;
     @SerializedName("id_vacunabasica")   public int    idVacuna;
     @SerializedName("fechaaplicacion")   public String fechaAplicacion;
+    
+    // Atributo extraído de la vista (opcional si usas joins)
+    @SerializedName("nombrevacuna")      public String nombreVacuna;
 }

@@ -16,8 +16,6 @@ public class DetalleMascotaViewModel extends ViewModel {
     private final MutableLiveData<MascotaResponse> mascota = new MutableLiveData<>();
     private final MutableLiveData<List<FotoMascotaResponse>> fotosGaleria = new MutableLiveData<>();
     private final MutableLiveData<List<IntervencionResponse>> intervenciones = new MutableLiveData<>();
-    // Usaremos String para mostrar las vacunas como texto plano por simplicidad en la UI
-    private final MutableLiveData<List<String>> vacunas = new MutableLiveData<>();
     private final MutableLiveData<Boolean> esFavorito = new MutableLiveData<>();
     private final MutableLiveData<List<VacunaUI>> listaVacunasUI = new MutableLiveData<>();
     public LiveData<List<VacunaUI>> getListaVacunasUI() { return listaVacunasUI; }
@@ -33,11 +31,33 @@ public class DetalleMascotaViewModel extends ViewModel {
 
     public void cargarDatosMascota(MascotaResponse dataSeleccionada, int idAdoptanteActual) {
         mascota.setValue(dataSeleccionada);
-        cargarGaleria(dataSeleccionada.idMascota);
-        cargarIntervenciones(dataSeleccionada.idMascota);
-        cargarVacunas(dataSeleccionada.idEspecie, dataSeleccionada.idMascota);
+        refrescarTodo(dataSeleccionada.idMascota, dataSeleccionada.idEspecie, idAdoptanteActual);
+    }
+
+    /**
+     * Refresca toda la información desde el servidor (útil tras una edición)
+     */
+    public void refrescarDatos(int idMascota, int idAdoptanteActual) {
+        repository.obtenerMascota(idMascota, new Callback<List<MascotaResponse>>() {
+            @Override
+            public void onResponse(Call<List<MascotaResponse>> call, Response<List<MascotaResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    MascotaResponse m = response.body().get(0);
+                    mascota.setValue(m);
+                    refrescarTodo(m.idMascota, m.idEspecie, idAdoptanteActual);
+                }
+            }
+            @Override
+            public void onFailure(Call<List<MascotaResponse>> call, Throwable t) {}
+        });
+    }
+
+    private void refrescarTodo(int idMascota, int idEspecie, int idAdoptanteActual) {
+        cargarGaleria(idMascota);
+        cargarIntervenciones(idMascota);
+        cargarVacunas(idEspecie, idMascota);
         if (idAdoptanteActual != -1) {
-            verificarFavorito(dataSeleccionada.idMascota, idAdoptanteActual);
+            verificarFavorito(idMascota, idAdoptanteActual);
         }
     }
 
@@ -106,33 +126,31 @@ public class DetalleMascotaViewModel extends ViewModel {
         }
     }
 
-    // 4. EL MÉTODO QUE HACE LA MAGIA
     private void cargarVacunas(int idEspecie, int idMascota) {
-        // Primero: Obtenemos todas las vacunas posibles para la especie (ej. Perro)
         repository.obtenerVacunasPorEspecie(idEspecie, new Callback<List<VacunaResponse>>() {
             @Override
             public void onResponse(Call<List<VacunaResponse>> call, Response<List<VacunaResponse>> respEspecie) {
                 if (respEspecie.isSuccessful() && respEspecie.body() != null) {
                     List<VacunaResponse> todasLasVacunas = respEspecie.body();
 
-                    // Segundo: Obtenemos las vacunas que realmente tiene la mascota
                     repository.obtenerVacunasMascota(idMascota, new Callback<List<VacunaMascotaResponse>>() {
                         @Override
                         public void onResponse(Call<List<VacunaMascotaResponse>> call, Response<List<VacunaMascotaResponse>> respMascota) {
                             List<VacunaMascotaResponse> aplicadas = respMascota.isSuccessful() && respMascota.body() != null
                                     ? respMascota.body() : new java.util.ArrayList<>();
 
-                            // Tercero: Cruzamos los datos
                             List<VacunaUI> resultado = new java.util.ArrayList<>();
                             for (VacunaResponse v : todasLasVacunas) {
                                 boolean tieneVacuna = false;
+                                String fechaAplicada = null;
                                 for (VacunaMascotaResponse aplic : aplicadas) {
                                     if (aplic.idVacuna == v.id) {
                                         tieneVacuna = true;
+                                        fechaAplicada = aplic.fechaAplicacion;
                                         break;
                                     }
                                 }
-                                resultado.add(new VacunaUI(v.nombre, tieneVacuna));
+                                resultado.add(new VacunaUI(v.nombre, tieneVacuna, fechaAplicada));
                             }
                             listaVacunasUI.setValue(resultado);
                         }
@@ -149,7 +167,8 @@ public class DetalleMascotaViewModel extends ViewModel {
     public static class VacunaUI {
         public String nombre;
         public boolean aplicada;
-        public VacunaUI(String n, boolean a) { this.nombre = n; this.aplicada = a; }
+        public String fecha;
+        public VacunaUI(String n, boolean a, String f) { this.nombre = n; this.aplicada = a; this.fecha = f;}
     }
 
 }

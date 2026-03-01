@@ -161,7 +161,6 @@ public class RefugiosFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void abrirDetalleRefugio(int idRefugio) {
-        // Enviar al Activity de Detalles (Creado por tu equipo)
         Intent intent = new Intent(requireContext(), DetalleRefugioActivity.class);
         intent.putExtra(DetalleRefugioActivity.EXTRA_ID_REFUGIO, idRefugio);
         startActivity(intent);

@@ -26,6 +26,7 @@ import unc.edu.pe.appadopcion.databinding.FragmentDescubrirBinding;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.data.repository.AppRepository;
 import unc.edu.pe.appadopcion.ui.mascotas.AgregarMascotaActivity;
+import unc.edu.pe.appadopcion.ui.refugios.DetalleRefugioActivity;
 import unc.edu.pe.appadopcion.vm.feed.DescubrirViewModel;
 import unc.edu.pe.appadopcion.vm.feed.DescubrirViewModelFactory;
 import unc.edu.pe.appadopcion.data.model.MascotaResponse;
@@ -230,7 +231,9 @@ public class DescubrirFragment extends Fragment implements MascotaAdapter.OnMasc
 
     @Override
     public void onRefugioClick(int idRefugio) {
-        Toast.makeText(requireContext(), "Abrir Perfil de Refugio ID: " + idRefugio, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(requireContext(), DetalleRefugioActivity.class);
+        intent.putExtra(DetalleRefugioActivity.EXTRA_ID_REFUGIO, idRefugio);
+        startActivity(intent);
     }
 
     @Override

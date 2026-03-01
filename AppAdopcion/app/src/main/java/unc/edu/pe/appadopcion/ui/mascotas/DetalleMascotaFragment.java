@@ -1,5 +1,7 @@
 package unc.edu.pe.appadopcion.ui.mascotas;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -42,6 +46,25 @@ public class DetalleMascotaFragment extends Fragment {
     private MascotaResponse mascotaActual;
     private boolean debeOcultarMenu = false;
 
+    private ActivityResultLauncher<Intent> editMascotaLauncher;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Registrar el launcher para recibir el resultado de la edición
+        editMascotaLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        // Si se editó con éxito, refrescamos los datos desde el servidor
+                        if (mascotaActual != null) {
+                            viewModel.refrescarDatos(mascotaActual.idMascota, session.getIdAdoptante());
+                        }
+                    }
+                }
+        );
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -65,7 +88,6 @@ public class DetalleMascotaFragment extends Fragment {
 
         binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
-        // --- CÓDIGO ACTUALIZADO PARA RECIBIR LA MASCOTA ---
         if (getArguments() != null) {
             mascotaActual = (MascotaResponse) getArguments().getSerializable("mascota");
             debeOcultarMenu = getArguments().getBoolean("ocultar_menu", false);
@@ -74,17 +96,19 @@ public class DetalleMascotaFragment extends Fragment {
         configurarLogicaVistas();
         observarViewModel();
 
-        // Asegurarse de que no sea null antes de cargar
         if (mascotaActual != null) {
             viewModel.cargarDatosMascota(mascotaActual, session.getIdAdoptante());
         } else {
             Toast.makeText(requireContext(), "Error al cargar la mascota", Toast.LENGTH_SHORT).show();
-            requireActivity().onBackPressed(); // Vuelve atrás si falla
+            requireActivity().onBackPressed();
         }
     }
 
     private void observarViewModel() {
-        viewModel.getMascota().observe(getViewLifecycleOwner(), this::poblarUI);
+        viewModel.getMascota().observe(getViewLifecycleOwner(), m -> {
+            mascotaActual = m; // Actualizar la referencia local
+            poblarUI(m);
+        });
 
         viewModel.getEsFavorito().observe(getViewLifecycleOwner(), esFav -> {
             if (esFav) {
@@ -110,21 +134,24 @@ public class DetalleMascotaFragment extends Fragment {
         });
 
         viewModel.getListaVacunasUI().observe(getViewLifecycleOwner(), vacunas -> {
-            binding.containerVacunas.removeAllViews(); // Limpiar por si acaso
+            binding.containerVacunas.removeAllViews();
             LayoutInflater inflater = LayoutInflater.from(requireContext());
 
             for (DetalleMascotaViewModel.VacunaUI v : vacunas) {
-                // Inflamos el XML de la tarjeta de vacuna que creamos antes
                 View itemView = inflater.inflate(R.layout.item_vacuna_check, binding.containerVacunas, false);
-
                 TextView tvNombre = itemView.findViewById(R.id.tvNombreVacuna);
+                TextView tvFecha = itemView.findViewById(R.id.tvFechaVacuna);
                 com.google.android.material.checkbox.MaterialCheckBox cbAplicada = itemView.findViewById(R.id.cbVacunaAplicada);
+                if (v.fecha != null && !v.fecha.isEmpty()) {
+                    tvFecha.setText("Aplicada: " + v.fecha);
+                    tvFecha.setVisibility(View.VISIBLE);
+                } else {
+                    tvFecha.setVisibility(View.GONE);
+                }
 
                 tvNombre.setText(v.nombre);
                 cbAplicada.setChecked(v.aplicada);
-                cbAplicada.setClickable(false); // Solo lectura, no queremos que el usuario lo cambie aquí
-
-                // Lo añadimos al contenedor
+                cbAplicada.setClickable(false);
                 binding.containerVacunas.addView(itemView);
             }
         });
@@ -138,24 +165,17 @@ public class DetalleMascotaFragment extends Fragment {
         binding.chipRefugio.setText("Refugio " + m.nombreRefugio);
         binding.tvHistoriaMascota.setText(m.historia != null ? m.historia : "Sin historia.");
 
-        // --- Configurar Estado ---
-        // Accedemos a las vistas DENTRO del include directamente a través de su clase Binding
         binding.itemEstado.tvItemTitle.setText("Estado");
         binding.itemEstado.tvItemValue.setText(m.estado);
         binding.itemEstado.ivItemIcon.setImageResource(R.drawable.ic_status);
 
-        // --- Configurar Genero ---
         binding.itemGenero.tvItemTitle.setText("Género");
         binding.itemGenero.tvItemValue.setText(m.genero);
         binding.itemGenero.ivItemIcon.setImageResource(R.drawable.ic_gender);
 
-        // --- Configurar Temperamento ---
-        // (Asumo que en tu include el título dice "Temperamento" por defecto, si no, ponlo)
         binding.itemTemperamento.tvItemTitle.setText("Temperamento");
         binding.itemTemperamento.tvItemValue.setText(m.temperamento != null ? m.temperamento : "No especificado");
-        // binding.itemTemperamento.ivItemIcon.setImageResource(R.drawable.lo_que_sea); // (Opcional si quieres cambiar el icono)
 
-        // --- Configurar Edad ---
         binding.itemEdad.tvItemTitle.setText("Edad");
         binding.itemEdad.tvItemValue.setText(m.edadAnios + " años, " + m.edadMeses + " meses");
         binding.itemEdad.ivItemIcon.setImageResource(R.drawable.ic_age);
@@ -257,10 +277,9 @@ public class DetalleMascotaFragment extends Fragment {
     }
 
     private void editarMascota(MascotaResponse m){
-        Intent intent = new Intent(requireContext(), EditarMascota.class);
+        Intent intent = new Intent(requireContext(), EditarMascotaActivity.class);
         intent.putExtra("mascota", m);
-
-        startActivity(intent);
+        editMascotaLauncher.launch(intent);
     }
 
     private void mostrarModalFotoFull(String urlFoto) {
@@ -287,9 +306,8 @@ public class DetalleMascotaFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Solo lo ocultamos si la variable dice que sí
         if (debeOcultarMenu) {
-            View bottomNav = requireActivity().findViewById(R.id.bottomNavigation); // Pon el ID de tu menú inferior
+            View bottomNav = requireActivity().findViewById(R.id.bottomNavigation);
             if (bottomNav != null) bottomNav.setVisibility(View.GONE);
         }
     }
@@ -297,7 +315,6 @@ public class DetalleMascotaFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        // Solo lo volvemos a mostrar si nosotros fuimos quienes lo ocultamos
         if (debeOcultarMenu) {
             View bottomNav = requireActivity().findViewById(R.id.bottomNavigation);
             if (bottomNav != null) bottomNav.setVisibility(View.VISIBLE);

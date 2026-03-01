@@ -190,6 +190,10 @@ public class AppRepository {
         api.obtenerFotosDeMascota("eq." + idMascota).enqueue(cb);
     }
 
+    public void eliminarFotosDeMascota(int idMascota, Callback<Void> cb) {
+        api.eliminarFotosDeMascota("eq." + idMascota).enqueue(cb);
+    }
+
     // ════════════════════════════════════════════════════════
     // FAVORITOS
     // ════════════════════════════════════════════════════════
@@ -295,6 +299,14 @@ public class AppRepository {
 
     public void obtenerIntervencionesMascota(int idMascota, Callback<List<IntervencionResponse>> cb) {
         api.obtenerIntervencionesDeMascota("eq." + idMascota).enqueue(cb);
+    }
+
+    public void eliminarVacunasMascota(int idMascota, Callback<Void> cb) {
+        api.eliminarVacunasMascota("eq." + idMascota).enqueue(cb);
+    }
+
+    public void eliminarIntervencionesMascota(int idMascota, Callback<Void> cb) {
+        api.eliminarIntervencionesMascota("eq." + idMascota).enqueue(cb);
     }
 
     // ══════════════════════════════════════════════════════════════

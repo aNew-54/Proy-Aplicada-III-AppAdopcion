@@ -24,7 +24,7 @@
             android:name=".ui.mascotas.AgregarMascotaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.mascotas.EditarMascota"
+            android:name=".ui.mascotas.EditarMascotaActivity"
             android:exported="false" />
         <activity
             android:name=".ui.perfil.EditarPerfilActivity"
