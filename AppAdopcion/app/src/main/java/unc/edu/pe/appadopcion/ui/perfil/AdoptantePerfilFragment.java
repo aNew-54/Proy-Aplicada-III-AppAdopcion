@@ -63,6 +63,12 @@ public class AdoptantePerfilFragment extends Fragment {
             viewModel.cargarDatosCompletos(session.getUuid(), session.getToken());
         }
 
+        binding.btnVerFavoritos.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.subFragmentContainer, new unc.edu.pe.appadopcion.ui.favoritos.FavoritosFragment())
+                    .addToBackStack(null)
+                    .commit();
+          
         // --- BOTÓN PARA EDITAR EL PERFIL ---
         binding.btnEditarPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), EditarPerfilActivity.class);
