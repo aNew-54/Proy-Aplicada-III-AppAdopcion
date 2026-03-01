@@ -163,10 +163,17 @@ public class DetalleMascotaFragment extends Fragment {
     private void configurarLogicaVistas() {
         if (session.esRefugio()) {
             binding.btnFavorito.setVisibility(View.GONE);
-            binding.btnSolicitud.setText("Editar información");
-            binding.btnSolicitud.setIconResource(R.drawable.ic_edit);
+            if(mascotaActual != null && session.getIdRefugio() == mascotaActual.idRefugio){
+                binding.btnSolicitud.setText("Editar información");
+                binding.btnSolicitud.setIconResource(R.drawable.ic_edit);
+                binding.btnSolicitud.setOnClickListener(v -> editarMascota(mascotaActual));
+            }
+            else {
+                binding.btnSolicitud.setVisibility(View.GONE);
+            }
         } else {
             binding.btnFavorito.setVisibility(View.VISIBLE);
+            binding.btnSolicitud.setOnClickListener(v -> enviarSolicitud());
             binding.btnFavorito.setOnClickListener(v -> {
                 int idAdoptante = session.getIdAdoptante();
                 if (idAdoptante != -1) {
@@ -192,12 +199,6 @@ public class DetalleMascotaFragment extends Fragment {
         });
 
         binding.chipRefugio.setOnClickListener(v -> abrirGoogleMaps());
-        if(session.esAdoptante()){
-            binding.btnSolicitud.setOnClickListener(v -> enviarSolicitud());
-        }
-        else {
-            binding.btnSolicitud.setOnClickListener(v -> editarMascota(mascotaActual));
-        }
     }
 
     private void abrirGoogleMaps() {

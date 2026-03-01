@@ -1,5 +1,6 @@
 package unc.edu.pe.appadopcion.ui.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +25,7 @@ import unc.edu.pe.appadopcion.R;
 import unc.edu.pe.appadopcion.databinding.FragmentDescubrirBinding;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.data.repository.AppRepository;
+import unc.edu.pe.appadopcion.ui.mascotas.AgregarMascotaActivity;
 import unc.edu.pe.appadopcion.vm.feed.DescubrirViewModel;
 import unc.edu.pe.appadopcion.vm.feed.DescubrirViewModelFactory;
 import unc.edu.pe.appadopcion.data.model.MascotaResponse;
@@ -63,7 +65,8 @@ public class DescubrirFragment extends Fragment implements MascotaAdapter.OnMasc
         if (session.esRefugio()) {
             binding.fbtnAgregarMascota.setVisibility(View.VISIBLE);
             binding.fbtnAgregarMascota.setOnClickListener(v -> {
-                Toast.makeText(requireContext(), "Ir a Crear Mascota", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(requireContext(), AgregarMascotaActivity.class);
+                startActivity(intent);
             });
         } else {
             binding.fbtnAgregarMascota.setVisibility(View.GONE);
