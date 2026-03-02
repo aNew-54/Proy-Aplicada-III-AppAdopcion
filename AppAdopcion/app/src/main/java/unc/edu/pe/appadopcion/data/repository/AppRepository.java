@@ -158,6 +158,10 @@ public class AppRepository {
         ).enqueue(cb);
     }
 
+    public void eliminarMascota(int idMascota, Callback<Void> cb) {
+        api.eliminarMascota("eq." + idMascota).enqueue(cb);
+    }
+
     /** Filtra mascotas por raza */
     public void filtrarPorRaza(int idRaza, String orden, Callback<List<MascotaResponse>> cb) {
         api.filtrarMascotasPorRaza("eq." + idRaza, "eq.Disponible", orden).enqueue(cb);
@@ -232,29 +236,19 @@ public class AppRepository {
                 .enqueue(cb);
     }
 
-    public void obtenerSolicitudesAdoptante(int idAdoptante,
-                                            Callback<List<SolicitudResponse>> cb) {
+    public void obtenerSolicitudesAdoptante(int idAdoptante, Callback<List<SolicitudResponse>> cb) {
+        // Asegúrate de que llame a la nueva vista: "rest/v1/vista_solicitudes_completa" en SupabaseApi
         api.obtenerSolicitudesAdoptante("eq." + idAdoptante, "fechadesolicitud.desc").enqueue(cb);
     }
 
-    public void obtenerSolicitudesRefugio(int idRefugio,
-                                          Callback<List<SolicitudResponse>> cb) {
+    public void obtenerSolicitudesRefugio(int idRefugio, Callback<List<SolicitudResponse>> cb) {
+        // Asegúrate de que llame a la nueva vista: "rest/v1/vista_solicitudes_completa" en SupabaseApi
         api.obtenerSolicitudesRefugio("eq." + idRefugio, "fechadesolicitud.desc").enqueue(cb);
     }
 
-    public void aprobarSolicitud(int idSolicitud, String fechaVisita, Callback<Void> cb) {
-        api.actualizarEstadoSolicitud("eq." + idSolicitud,
-                new SolicitudRequest("Aprobada", fechaVisita, null)).enqueue(cb);
-    }
-
-    public void rechazarSolicitud(int idSolicitud, String notas, Callback<Void> cb) {
-        api.actualizarEstadoSolicitud("eq." + idSolicitud,
-                new SolicitudRequest("Rechazada", null, notas)).enqueue(cb);
-    }
-
-    public void agendarVisita(int idSolicitud, String fechaVisita, Callback<Void> cb) {
-        api.actualizarEstadoSolicitud("eq." + idSolicitud,
-                new SolicitudRequest("Visita Agendada", fechaVisita, null)).enqueue(cb);
+    // 👇 ESTA ES LA LÍNEA NUEVA QUE DEBES AGREGAR 👇
+    public void actualizarEstadoSolicitud(int idSolicitud, SolicitudRequest req, Callback<Void> cb) {
+        api.actualizarEstadoSolicitud("eq." + idSolicitud, req).enqueue(cb);
     }
 
     // ════════════════════════════════════════════════════════
@@ -338,4 +332,6 @@ public class AppRepository {
     public void agregarIntervencion(IntervencionRequest req, Callback<Void> cb) {
         api.agregarIntervencion(req).enqueue(cb);
     }
+
+
 }

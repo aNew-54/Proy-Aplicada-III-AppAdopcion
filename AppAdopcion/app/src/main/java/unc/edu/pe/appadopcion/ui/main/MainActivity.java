@@ -7,12 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import unc.edu.pe.appadopcion.R;
+import unc.edu.pe.appadopcion.data.api.SupabaseClient;
 import unc.edu.pe.appadopcion.data.local.SessionManager;
 import unc.edu.pe.appadopcion.databinding.ActivityMainBinding;
 import unc.edu.pe.appadopcion.ui.auth.WelcomeActivity;
 import unc.edu.pe.appadopcion.ui.feed.DescubrirFragment;
 import unc.edu.pe.appadopcion.ui.refugios.RefugiosFragment;
 import unc.edu.pe.appadopcion.ui.perfil.PerfilFragment;
+import unc.edu.pe.appadopcion.ui.solicitudes.SolicitudesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
         session = new SessionManager(this);
 
-        // Pantalla inicial: siempre Descubrir
+        // Inicializar SupabaseClient con el Contexto (Para que el Guardián funcione)
+        SupabaseClient.init(this);
+
         if (savedInstanceState == null) {
             cargarFragment(new DescubrirFragment());
         }
@@ -41,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
             }
             if (id == R.id.nav_refugios) {
                 cargarFragment(new RefugiosFragment());
+                return true;
+            }
+            if (id == R.id.nav_solicitudes){
+                cargarFragment(new SolicitudesFragment());
                 return true;
             }
             if (id == R.id.nav_perfil) {
@@ -58,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    /** Llamado desde PerfilFragment cuando el usuario cierra sesión */
     public void cerrarSesion() {
         session.cerrarSesion();
         startActivity(new Intent(this, WelcomeActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        finish();
     }
 
     @Override

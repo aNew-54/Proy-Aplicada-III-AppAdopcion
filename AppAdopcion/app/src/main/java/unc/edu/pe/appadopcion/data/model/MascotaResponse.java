@@ -42,10 +42,10 @@ public class MascotaResponse implements Serializable{
     public Double latitudRefugio;
     @SerializedName("longitudrefugio")
     public Double longitudRefugio;
-    @SerializedName("portadarefugio")
+    @SerializedName(value = "portadarefugio", alternate = {"urlportada"})
     public String portadaRefugio;
     @SerializedName("telefonorefugio")
     public String telefonoRefugio;
-    @SerializedName("perfilrefugio")
+    @SerializedName(value = "perfilrefugio", alternate = {"urlimagenusuario", "fotoperfil"})
     public String perfilRefugio;
 }

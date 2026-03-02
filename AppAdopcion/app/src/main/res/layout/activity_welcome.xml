@@ -15,7 +15,7 @@
         <View
             android:id="@+id/viewDecorTop"
             android:layout_width="0dp"
-            android:layout_height="320dp"
+            android:layout_height="360dp"
             android:background="@drawable/bg_welcome_top"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -24,10 +24,10 @@
         <!-- Ícono/logo de la app -->
         <ImageView
             android:id="@+id/ivLogo"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginTop="80dp"
-            android:src="@drawable/ic_pets"
+            android:src="@drawable/ic_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

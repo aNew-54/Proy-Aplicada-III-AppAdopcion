@@ -152,6 +152,14 @@ public class EditarMascotaActivity extends AppCompatActivity {
             listaVacunasActual = vacunas;
         });
 
+        viewModel.getDeleteSuccess().observe(this, exito -> {
+            if (exito != null && exito) {
+                Toast.makeText(this, "Mascota eliminada correctamente", Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK); // Avisamos que hubo un cambio drástico
+                finish();
+            }
+        });
+
         viewModel.getListaGaleria().observe(this, this::renderizarGaleria);
         viewModel.getIntervenciones().observe(this, this::renderizarIntervenciones);
     }
@@ -236,6 +244,7 @@ public class EditarMascotaActivity extends AppCompatActivity {
         });
 
         binding.btnGuardarCambios.setOnClickListener(v -> validarYGuardar());
+        binding.btnEliminarMascota.setOnClickListener(v -> mostrarDialogoEliminacion());
     }
 
     private void validarYGuardar() {
@@ -317,6 +326,17 @@ public class EditarMascotaActivity extends AppCompatActivity {
             if (esExito) finish();
         });
         dialog.show();
+    }
+
+    private void mostrarDialogoEliminacion() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Eliminar Mascota")
+                .setMessage("¿Estás seguro de que deseas eliminar a " + mascotaActual.nombre + "? Esta acción no se puede deshacer.")
+                .setPositiveButton("Eliminar", (dialog, which) -> {
+                    viewModel.eliminarMascotaCompleta(session.getToken(), mascotaActual.idMascota);
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 
     @Override

@@ -50,6 +50,7 @@ public class EditarMascotaViewModel extends ViewModel {
     private final MutableLiveData<List<VacunaResponse>> vacunasSeleccionadas = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<IntervencionLocal>> intervencionesLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<Uri>> listaGaleria = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Boolean> deleteSuccess = new MutableLiveData<>();
 
     private AppRepository repo;
 
@@ -63,6 +64,7 @@ public class EditarMascotaViewModel extends ViewModel {
     public LiveData<List<VacunaResponse>> getVacunasSeleccionadas() { return vacunasSeleccionadas; }
     public LiveData<List<IntervencionLocal>> getIntervenciones() { return intervencionesLiveData; }
     public LiveData<List<Uri>> getListaGaleria() { return listaGaleria; }
+    public LiveData<Boolean> getDeleteSuccess() { return deleteSuccess; }
 
     public void init(String token) {
         repo = new AppRepository(token);
@@ -433,5 +435,28 @@ public class EditarMascotaViewModel extends ViewModel {
             String[] partes = fecha.split("/");
             return partes[2] + "-" + partes[1] + "-" + partes[0];
         } catch (Exception e) { return fecha; }
+    }
+
+    public void eliminarMascotaCompleta(String token, int idMascota) {
+        isLoading.setValue(true);
+        AppRepository repo = new AppRepository(token);
+
+        repo.eliminarMascota(idMascota, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                isLoading.setValue(false);
+                if (response.isSuccessful()) {
+                    deleteSuccess.setValue(true);
+                } else {
+                    errorMessage.setValue("Error al eliminar. Revisa que no tenga solicitudes activas.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                isLoading.setValue(false);
+                errorMessage.setValue("Error de red: " + t.getMessage());
+            }
+        });
     }
 }

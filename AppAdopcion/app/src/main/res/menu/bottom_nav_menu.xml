@@ -12,6 +12,11 @@
         android:title="Refugios" />
 
     <item
+        android:id="@+id/nav_solicitudes"
+        android:icon="@drawable/ic_solicitud"
+        android:title="Solicitudes" />
+
+    <item
         android:id="@+id/nav_perfil"
         android:icon="@drawable/ic_person"
         android:title="Yo" />

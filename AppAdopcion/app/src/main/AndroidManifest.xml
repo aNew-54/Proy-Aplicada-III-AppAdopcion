@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppAdopcion">
         <activity
+            android:name=".ui.solicitudes.DetalleSolicitudActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.refugios.DetalleRefugioActivity"
             android:exported="false" />
         <activity

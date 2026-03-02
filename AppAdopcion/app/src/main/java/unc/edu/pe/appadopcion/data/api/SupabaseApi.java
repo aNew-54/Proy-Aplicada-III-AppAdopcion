@@ -152,6 +152,8 @@ public interface SupabaseApi {
             @Query("id_mascota") String eqId,
             @Body MascotaRequest mascota);
 
+    @DELETE("rest/v1/mascota")
+    Call<Void> eliminarMascota(@Query("id_mascota") String eqId);
 
     // ════════════════════════════════════════════════════════
     // FOTOS DE MASCOTA
@@ -206,25 +208,16 @@ public interface SupabaseApi {
 
     @POST("rest/v1/solicitudadopcion")
     Call<Void> crearSolicitud(@Body SolicitudRequest solicitud);
-
-    @GET("rest/v1/solicitudadopcion")
+    @GET("rest/v1/vista_solicitudes_completa")
     Call<List<SolicitudResponse>> obtenerSolicitudesAdoptante(
-            @Query("id_adoptante") String eqAdoptante,
-            @Query("order")        String orden
-    );
+            @Query("id_adoptante") String eqAdoptante, @Query("order") String orden);
 
-    @GET("rest/v1/solicitudadopcion")
+    @GET("rest/v1/vista_solicitudes_completa")
     Call<List<SolicitudResponse>> obtenerSolicitudesRefugio(
-            @Query("id_refugio") String eqRefugio,
-            @Query("order")      String orden
-    );
+            @Query("id_refugio") String eqRefugio, @Query("order") String orden);
 
     @PATCH("rest/v1/solicitudadopcion")
-    Call<Void> actualizarEstadoSolicitud(
-            @Query("id_solicitud") String eqId,
-            @Body SolicitudRequest solicitud
-    );
-
+    Call<Void> actualizarEstadoSolicitud(@Query("id_solicitud") String eqId, @Body SolicitudRequest solicitud);
 
     // ════════════════════════════════════════════════════════
     // CATÁLOGOS (Especie, Raza, Vacunas)

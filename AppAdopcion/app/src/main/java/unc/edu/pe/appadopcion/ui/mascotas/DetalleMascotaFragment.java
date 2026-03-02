@@ -35,6 +35,7 @@ import unc.edu.pe.appadopcion.data.repository.AppRepository;
 import unc.edu.pe.appadopcion.databinding.FragmentDetalleMascotaBinding;
 import unc.edu.pe.appadopcion.ui.mascotas.adapters.GaleriaFotosAdapter;
 import unc.edu.pe.appadopcion.ui.mascotas.adapters.IntervencionesAdapter;
+import unc.edu.pe.appadopcion.ui.solicitudes.CrearSolicitudBottomSheet;
 import unc.edu.pe.appadopcion.utils.ImageLoader;
 import unc.edu.pe.appadopcion.vm.mascotas.DetalleMascotaViewModel;
 
@@ -252,28 +253,9 @@ public class DetalleMascotaFragment extends Fragment {
     }
 
     private void enviarSolicitud() {
-        if (mascotaActual == null || mascotaActual.telefonoRefugio == null) {
-            Toast.makeText(requireContext(),
-                    "Teléfono no disponible", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String numero  = mascotaActual.telefonoRefugio.replace("+", "").replace(" ", "");
-        String mensaje = "Hola Refugio " + mascotaActual.nombreRefugio
-                + ", estoy interesado en adoptar a " + mascotaActual.nombre
-                + ". Quisiera más información.";
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(
-                "https://api.whatsapp.com/send?phone=" + numero
-                        + "&text=" + Uri.encode(mensaje)));
-
-        try {
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(requireContext(),
-                    "No tienes WhatsApp instalado", Toast.LENGTH_SHORT).show();
-        }
+        if (mascotaActual == null) return;
+        CrearSolicitudBottomSheet bottomSheet = new CrearSolicitudBottomSheet(mascotaActual);
+        bottomSheet.show(requireActivity().getSupportFragmentManager(), "CrearSolicitud");
     }
 
     private void editarMascota(MascotaResponse m){

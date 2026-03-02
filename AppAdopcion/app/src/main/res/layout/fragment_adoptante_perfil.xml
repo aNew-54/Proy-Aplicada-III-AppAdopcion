@@ -291,35 +291,6 @@
                 app:icon="@drawable/ic_favorite"
                 app:cornerRadius="12dp" />
 
-            <!-- ── SOLICITUDES ─────────────────────────────── -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="8dp"
-                android:text="Mis solicitudes de adopción"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvSinSolicitudes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="Aún no has enviado solicitudes"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:visibility="visible" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvSolicitudes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:paddingHorizontal="16dp"
-                android:visibility="gone" />
-
             <!-- ── CERRAR SESIÓN ───────────────────────────── -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCerrarSesion"

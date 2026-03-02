@@ -89,13 +89,28 @@ public class MascotaAdapter extends RecyclerView.Adapter<MascotaAdapter.MascotaV
                     binding.ivMascotaFoto, R.drawable.ic_pets);
 
             // 2. LÓGICA PARA LA FOTO DE PERFIL DEL REFUGIO
-            if (mascota.perfilRefugio != null && !mascota.perfilRefugio.isEmpty()) {
-                ImageLoader.cargarPublica(itemView.getContext(), mascota.perfilRefugio,
+            String urlLogo = mascota.perfilRefugio;
+
+            // A. Si es una ruta relativa (ej: "avatars/uid/foto.jpg"), la convertimos a URL completa
+            if (urlLogo != null && !urlLogo.isEmpty() && !urlLogo.startsWith("http")) {
+                urlLogo = unc.edu.pe.appadopcion.BuildConfig.SUPABASE_URL + "/storage/v1/object/public/" + urlLogo;
+            }
+
+            // B. Si después de todo sigue vacía o nula, usamos la Portada como respaldo
+            if (urlLogo == null || urlLogo.isEmpty()) {
+                urlLogo = mascota.portadaRefugio;
+                // Por si la portada también llega como ruta relativa
+                if (urlLogo != null && !urlLogo.isEmpty() && !urlLogo.startsWith("http")) {
+                    urlLogo = unc.edu.pe.appadopcion.BuildConfig.SUPABASE_URL + "/storage/v1/object/public/" + urlLogo;
+                }
+            }
+
+            // C. Finalmente, cargamos la imagen (ahora sí es 100% seguro que es una URL válida)
+            if (urlLogo != null && !urlLogo.isEmpty()) {
+                ImageLoader.cargarPublica(itemView.getContext(), urlLogo,
                         binding.ivRefugioLogo, R.drawable.ic_person);
             } else {
-                // Fallback de seguridad: Si no tiene foto de perfil, usamos la portada
-                ImageLoader.cargarPublica(itemView.getContext(), mascota.portadaRefugio,
-                        binding.ivRefugioLogo, R.drawable.ic_person);
+                binding.ivRefugioLogo.setImageResource(R.drawable.ic_person);
             }
 
             // --- Lógica del Corazón ---

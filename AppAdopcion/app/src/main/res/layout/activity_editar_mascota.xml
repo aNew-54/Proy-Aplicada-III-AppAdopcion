@@ -463,6 +463,19 @@
                     android:backgroundTint="#6B3FA8"
                     app:cornerRadius="16dp" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEliminarMascota"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Eliminar mascota"
+                    android:textColor="#D32F2F"
+                    android:textSize="14sp"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    app:icon="@drawable/ic_delete"
+                    app:iconTint="#D32F2F"
+                    app:iconGravity="textStart" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

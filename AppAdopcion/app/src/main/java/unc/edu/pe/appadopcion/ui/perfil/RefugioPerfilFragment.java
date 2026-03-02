@@ -110,12 +110,6 @@ public class RefugioPerfilFragment extends Fragment {
             }
         });
 
-        viewModel.getSolicitudes().observe(getViewLifecycleOwner(), solicitudes -> {
-            if (solicitudes != null) {
-                cargarSolicitudesEnUI(solicitudes);
-            }
-        });
-
     }
 
     private void mostrarDatos(RefugioResponse r) {
@@ -145,21 +139,6 @@ public class RefugioPerfilFragment extends Fragment {
                     binding.ivPortada,
                     R.drawable.bg_registro_header
             );
-        }
-    }
-
-    private void cargarSolicitudesEnUI(List<SolicitudResponse> lista) {
-        if (binding == null) return;
-
-        if (lista.isEmpty()) {
-            binding.tvSinSolicitudes.setVisibility(View.VISIBLE);
-            binding.rvSolicitudes.setVisibility(View.GONE);
-        } else {
-            binding.tvSinSolicitudes.setVisibility(View.GONE);
-            binding.rvSolicitudes.setVisibility(View.VISIBLE);
-            binding.rvSolicitudes.setLayoutManager(new LinearLayoutManager(requireContext()));
-            binding.rvSolicitudes.setAdapter(new SolicitudesRefugioAdapter(lista, (id, aprobada) ->
-                    Toast.makeText(requireContext(), "Gestión — próximamente", Toast.LENGTH_SHORT).show()));
         }
     }
 
