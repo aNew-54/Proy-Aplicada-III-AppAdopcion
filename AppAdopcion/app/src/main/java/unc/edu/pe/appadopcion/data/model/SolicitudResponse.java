@@ -26,4 +26,5 @@ public class SolicitudResponse implements Serializable {
     @SerializedName("urlportadamascota") public String urlPortadaMascota;
     @SerializedName("nombrerefugio") public String nombreRefugio;
     @SerializedName("nombreadoptante") public String nombreAdoptante;
+    @SerializedName("telefonorefugio") public String telefonoRefugio;
 }

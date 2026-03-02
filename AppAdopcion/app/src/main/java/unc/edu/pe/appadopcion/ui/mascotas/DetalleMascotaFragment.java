@@ -162,6 +162,8 @@ public class DetalleMascotaFragment extends Fragment {
         ImageLoader.cargarPublica(requireContext(), m.urlPortada,
                 binding.ivPortadaMascota, R.drawable.bg_registro_header);
 
+        binding.chipEspecie.setText(m.nombreEspecie != null ? m.nombreEspecie: "Desconocida");
+
         binding.tvNombreMascotaHeader.setText(m.nombre);
         binding.chipRefugio.setText("Refugio " + m.nombreRefugio);
         binding.tvHistoriaMascota.setText(m.historia != null ? m.historia : "Sin historia.");

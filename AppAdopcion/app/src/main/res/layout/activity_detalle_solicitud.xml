@@ -192,21 +192,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="Fecha y Hora de Visita"
-                    app:endIconMode="custom"
+                    android:hint="Fecha y Hora de Visita" app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_calendar"
                     app:endIconTint="#9370C8"
                     app:boxStrokeColor="#9370C8"
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp">
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:helperText="Determinado por el refugio">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etFechaVisita"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Opcional"
-                        android:textColor="#1C1B1F" />
+                    android:id="@+id/etFechaVisita"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#1C1B1F" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -251,6 +250,21 @@
                     android:textStyle="bold"
                     app:backgroundTint="#6B3FA8"
                     app:cornerRadius="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnContactarWhatsApp"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:paddingVertical="14dp"
+                    android:text="Contactar al Refugio por WhatsApp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#25D366"
+                    app:cornerRadius="16dp"
+                    android:visibility="gone" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

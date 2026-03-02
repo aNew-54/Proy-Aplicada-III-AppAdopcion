@@ -53,10 +53,9 @@ public class DetalleSolicitudActivity extends AppCompatActivity {
         binding.chipRefugio.setText("Para: " + solicitud.nombreRefugio);
         binding.tvMensaje.setText(solicitud.mensaje);
         binding.actvEstado.setText(solicitud.estado, false);
-        binding.etFechaVisita.setText(solicitud.fechaVisita != null ? solicitud.fechaVisita : "");
+        binding.etFechaVisita.setText(limpiarFecha(solicitud.fechaVisita));
         binding.etNotas.setText(solicitud.notasRefugio != null ? solicitud.notasRefugio : "");
 
-        // Al quitar el app:tint del XML, esto cargará la foto correctamente
         ImageLoader.cargarPublica(this, solicitud.urlPortadaMascota, binding.ivMascota, R.drawable.ic_pets);
 
         if (session.esRefugio()) {
@@ -69,15 +68,67 @@ public class DetalleSolicitudActivity extends AppCompatActivity {
 
             binding.btnGuardar.setOnClickListener(v -> {
                 String nuevoEstado = binding.actvEstado.getText().toString();
-                String notas = binding.etNotas.getText().toString();
-                String fecha = binding.etFechaVisita.getText().toString();
+                String notas = binding.etNotas.getText().toString().trim();
+                String fecha = binding.etFechaVisita.getText().toString().trim();
+
+                // 1. Validar "Visita Agendada": Obligar a poner fecha
+                if (nuevoEstado.equals("Visita Agendada") && fecha.isEmpty()) {
+                    Toast.makeText(this, "Por favor, seleccione la fecha y hora de la visita.", Toast.LENGTH_LONG).show();
+                    return; // Detiene la ejecución aquí
+                }
+
+                // 2. Validar "Rechazada": Borrar fecha y pedir motivo
+                if (nuevoEstado.equals("Rechazada")) {
+                    fecha = null; // Ignoramos la fecha si es rechazada
+                    if (notas.isEmpty()) {
+                        Toast.makeText(this, "Por favor, indique en las notas el motivo del rechazo.", Toast.LENGTH_LONG).show();
+                        return; // Detiene la ejecución aquí
+                    }
+                }
+
+                // 3. Limpieza final para la base de datos (evita errores de sintaxis en PostgreSQL)
+                // Si la fecha está en blanco (ej. Pendiente o Aprobada sin visita aún), enviamos null en lugar de ""
+                if (fecha != null && fecha.isEmpty()) {
+                    fecha = null;
+                }
+
+                // 4. Si pasa todas las validaciones, enviamos los datos al servidor
                 viewModel.actualizarSolicitud(repo, solicitud.idSolicitud, nuevoEstado, fecha, notas);
             });
+
         } else {
+            // Es adoptante (Solo lectura)
             binding.tilEstado.setEnabled(false);
             binding.tilFechaVisita.setEnabled(false);
             binding.tilNotas.setEnabled(false);
             binding.btnGuardar.setVisibility(View.GONE);
+
+            // NUEVO: Mostramos el botón de WhatsApp y configuramos el clic
+            binding.btnContactarWhatsApp.setVisibility(View.VISIBLE);
+            binding.btnContactarWhatsApp.setOnClickListener(v -> {
+                // Asegúrate de que tu modelo SolicitudResponse tenga el campo telefonoRefugio.
+                // Si se llama diferente, cámbialo aquí abajo.
+                String numero = solicitud.telefonoRefugio;
+
+                if (numero != null && !numero.trim().isEmpty()) {
+                    // Quitamos espacios por si el número se guardó como "999 666 122"
+                    numero = numero.replace(" ", "");
+
+                    // Preparamos un mensaje automático amigable
+                    String mensaje = "Hola, escribo sobre mi solicitud de adopción para " + solicitud.nombreMascota + ".";
+                    String url = "https://api.whatsapp.com/send?phone=51" + numero + "&text=" + android.net.Uri.encode(mensaje);
+
+                    try {
+                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                        intent.setData(android.net.Uri.parse(url));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(this, "No tienes WhatsApp instalado.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "El refugio no tiene un número registrado.", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -123,5 +174,19 @@ public class DetalleSolicitudActivity extends AppCompatActivity {
         viewModel.getErrorMessage().observe(this, error -> {
             if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private String limpiarFecha(String fechaCruda) {
+        if (fechaCruda == null || fechaCruda.isEmpty()) return "";
+        try {
+            // Si viene de Supabase (ej: "2026-03-09T13:33:00+00:00")
+            if (fechaCruda.contains("T")) {
+                // Reemplazamos la 'T' por un espacio y cortamos hasta el minuto (los primeros 16 caracteres)
+                return fechaCruda.replace("T", " ").substring(0, 16);
+            }
+            return fechaCruda;
+        } catch (Exception e) {
+            return fechaCruda; // Si algo falla, devuelve la original por seguridad
+        }
     }
 }
