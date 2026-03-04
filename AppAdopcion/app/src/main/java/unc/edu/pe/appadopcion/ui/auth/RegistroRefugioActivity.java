@@ -20,22 +20,34 @@ public class RegistroRefugioActivity extends AppCompatActivity {
     private ActivityRegistroRefugioBinding binding;
     private RegistroRefugioViewModel viewModel;
 
+    // AHORA TENEMOS DOS URIS
+    private Uri imagenPerfilUri = null;
     private Uri imagenPortadaUri = null;
+
     private double latitudSeleccionada = 0;
     private double longitudSeleccionada = 0;
     private String direccionFormateada = null;
 
-    // Launcher de foto
-    private final ActivityResultLauncher<String> imagePickerLauncher =
+    // 1. Launcher para la Foto de Perfil
+    private final ActivityResultLauncher<String> perfilPickerLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
-                    imagenPortadaUri = uri;
-                    binding.ivFotoPerfil.setImageURI(uri); // Asumiendo que reciclas el layout de diseño
-                    binding.tvPerfilHint.setText("Portada seleccionada ✓");
+                    imagenPerfilUri = uri;
+                    binding.ivFotoPerfil.setImageURI(uri);
+                    binding.tvPerfilHint.setText("Perfil listo ✓");
                 }
             });
 
-    // Launcher de mapa
+    // 2. Launcher para la Foto de Portada
+    private final ActivityResultLauncher<String> portadaPickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    imagenPortadaUri = uri;
+                    binding.ivPortada.setImageURI(uri);
+                    binding.tvPortadaHint.setText("Portada lista ✓");
+                }
+            });
+
     private final ActivityResultLauncher<Intent> mapLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
@@ -57,12 +69,14 @@ public class RegistroRefugioActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(RegistroRefugioViewModel.class);
         configurarObservadores();
 
-        // Eventos de botones
         binding.etDireccion.setOnClickListener(v -> mapLauncher.launch(new Intent(this, MapPickerActivity.class)));
         binding.etDireccion.setFocusable(false);
         binding.ivMapIcon.setOnClickListener(v -> mapLauncher.launch(new Intent(this, MapPickerActivity.class)));
 
-        binding.cardFotoPerfil.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
+        // Asignamos cada botón a su respectivo Launcher
+        binding.cardFotoPerfil.setOnClickListener(v -> perfilPickerLauncher.launch("image/*"));
+        binding.cardPortada.setOnClickListener(v -> portadaPickerLauncher.launch("image/*"));
+
         binding.btnBack.setOnClickListener(v -> finish());
         binding.btnRegistrarse.setOnClickListener(v -> prepararYRegistrar());
     }
@@ -71,10 +85,10 @@ public class RegistroRefugioActivity extends AppCompatActivity {
         viewModel.getLoadingState().observe(this, estado -> {
             if (estado != null) {
                 binding.btnRegistrarse.setEnabled(false);
-                binding.btnRegistrarse.setText(estado); // Mostrará "Autenticando...", "Subiendo...", etc.
+                binding.btnRegistrarse.setText(estado);
             } else {
                 binding.btnRegistrarse.setEnabled(true);
-                binding.btnRegistrarse.setText("Registrar Refugio");
+                binding.btnRegistrarse.setText("✓ Registrarse");
             }
         });
 
@@ -93,13 +107,12 @@ public class RegistroRefugioActivity extends AppCompatActivity {
 
     private void prepararYRegistrar() {
         String nombre = binding.etNombreRefugio.getText().toString().trim();
-        String descripcion = binding.etDescripcion.getText().toString().trim(); // Asumiendo que lo agregaste al XML
+        String descripcion = binding.etDescripcion.getText().toString().trim();
         String telefono = binding.etTelefono.getText().toString().trim();
         String email = binding.etEmail.getText().toString().trim();
         String password = binding.etPassword.getText().toString().trim();
         String direccion = binding.etDireccion.getText().toString().trim();
 
-        // Validaciones locales
         if (nombre.isEmpty()) { binding.tilNombreRefugio.setError("Campo requerido"); return; } else binding.tilNombreRefugio.setError(null);
         if (telefono.isEmpty()) { binding.tilTelefono.setError("Campo requerido"); return; } else binding.tilTelefono.setError(null);
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) { binding.tilEmail.setError("Correo inválido"); return; } else binding.tilEmail.setError(null);
@@ -108,22 +121,17 @@ public class RegistroRefugioActivity extends AppCompatActivity {
         Double latFinal = latitudSeleccionada != 0 ? latitudSeleccionada : null;
         Double lngFinal = longitudSeleccionada != 0 ? longitudSeleccionada : null;
 
-        // Transformamos la Uri en byte[] en un hilo secundario para no congelar la UI,
-        // y luego delegamos toda la responsabilidad al ViewModel.
-        if (imagenPortadaUri != null) {
-            new Thread(() -> {
-                byte[] imageBytes = ImageHelper.uriToBytes(this, imagenPortadaUri);
-                runOnUiThread(() -> viewModel.registrarRefugio(
-                        email, password, nombre, descripcion, telefono,
-                        direccion, latFinal, lngFinal, imageBytes
-                ));
-            }).start();
-        } else {
-            viewModel.registrarRefugio(
+        // Ejecutamos la conversión de bytes en un hilo secundario
+        new Thread(() -> {
+            // Convertimos ambas imágenes (si el usuario no las seleccionó, enviará null)
+            byte[] perfilBytes = imagenPerfilUri != null ? ImageHelper.uriToBytes(this, imagenPerfilUri) : null;
+            byte[] portadaBytes = imagenPortadaUri != null ? ImageHelper.uriToBytes(this, imagenPortadaUri) : null;
+
+            runOnUiThread(() -> viewModel.registrarRefugio(
                     email, password, nombre, descripcion, telefono,
-                    direccion, latFinal, lngFinal, null
-            );
-        }
+                    direccion, latFinal, lngFinal, perfilBytes, portadaBytes
+            ));
+        }).start();
     }
 
     @Override
